@@ -77,7 +77,13 @@ function Header() {
   </div></header>;
 }
 function Cta({href,children,secondary=false}){return <a href={href} className={'btn '+(secondary?'btn-outline':'btn-primary')}>{children} <Icon name="arrow" size={18}/></a>}
-const focus=[['chip','Hệ thống nhúng'],['cloud','Máy chủ IoT'],['phone','Ứng dụng di động'],['bars','AI & Bảo trì thông minh']];
+const specializations = [
+  { id: 'embedded', number: '01', icon: 'chip', name: 'Embedded Systems', scope: 'Hardware / Firmware', description: 'Thiết kế phần cứng, lập trình vi điều khiển, cảm biến và hệ thống nhúng.' },
+  { id: 'web', number: '02', icon: 'cloud', name: 'Web Application', scope: 'Backend / Frontend / Database', description: 'Phát triển API, cơ sở dữ liệu, giao diện web và nền tảng quản lý thiết bị.' },
+  { id: 'mobile', number: '03', icon: 'phone', name: 'Mobile Application', scope: 'Mobile / Cross-platform', description: 'Xây dựng ứng dụng di động để giám sát, điều khiển và tương tác với hệ thống.' },
+  { id: 'ai', number: '04', icon: 'brain', name: 'AI & Predictive Maintenance', scope: 'Machine Learning / Data Analytics', description: 'Phân tích dữ liệu cảm biến, nhận diện bất thường và dự báo bảo trì.' }
+];
+const focus = specializations.map(({ icon, name }) => [icon, name]);
 function Hero(){return <section id="home" className="hero">
   <div className="hero-bg" style={{backgroundImage:`url(${heroReference})`}} role="img" aria-label="Động cơ công nghiệp kết nối thiết bị IoT và bảng theo dõi trạng thái"/>
   <div className="container hero-content">
@@ -85,6 +91,7 @@ function Hero(){return <section id="home" className="hero">
       <div className="kicker light">HỌC · XÂY DỰNG · TRIỂN KHAI</div>
       <h1>Lab for Autonomous<br/>Machines <span className="text-blue">&amp; IoT</span></h1>
       <p>Từ hệ thống nhúng đến bảo trì thông minh.</p>
+      <a className="hero-track-notice" href="#tracks"><span className="hero-track-dot" aria-hidden="true"/><strong>4 hướng chuyên môn</strong><span>Chọn 1 khi ứng tuyển</span><Icon name="arrow" size={16}/></a>
       <div className="button-row"><Cta href="#projects">Khám phá dự án</Cta><a className="btn btn-dark-outline" href="#join">Tham gia</a></div>
     </div>
     <div className="hero-focus">{focus.map(([icon,label])=><div className="focus-item" key={label}><span className="focus-icon"><Icon name={icon} size={28}/></span><span>{label}</span></div>)}</div>
@@ -121,17 +128,46 @@ function About(){return <section id="about" className="section about-section"><d
   </div>
   <div className="about-cards" id="about-values">{aboutCards.map(c=><article className="about-card" key={c.title}><img src={A+c.image} alt="" className="card-decoration" loading="lazy"/><div className="round-icon"><Icon name={c.icon} size={29}/></div><h3>{c.title}</h3><p>{c.text}</p><a href="#learning" aria-label={'Tìm hiểu '+c.title} className="circle-link"><Icon name="arrow" size={20}/></a></article>)}</div>
 </div></section>}
+
+function Tracks({ selectedTrack, onSelectTrack }) {
+  return <section id="tracks" className="section tracks-section" aria-labelledby="tracks-heading">
+    <div className="container">
+      <div className="tracks-intro">
+        <div className="kicker light">CHỌN HƯỚNG CHUYÊN MÔN <span className="kicker-line"/></div>
+        <h2 id="tracks-heading">One Lab. <span>Four Tracks.</span></h2>
+        <p>Ngay khi đăng ký tham gia Lab, mỗi sinh viên <strong>phải chọn một trong bốn lĩnh vực chuyên môn chính</strong>. Bạn không cần thành thạo từ đầu, nhưng cần xác định hướng mình muốn phát triển.</p>
+      </div>
+      <div className="tracks-grid">
+        {specializations.map(track => <a
+          className={'track-card' + (selectedTrack === track.id ? ' track-card-selected' : '')}
+          href="#join"
+          key={track.id}
+          onClick={() => onSelectTrack(track.id)}
+          aria-label={'Chọn '+track.name+' và đến biểu mẫu đăng ký'}
+        >
+          <div className="track-card-top"><span className="track-card-icon"><Icon name={track.icon} size={30}/></span><span className="track-card-number">{track.number}</span></div>
+          <h3>{track.name}</h3>
+          <p className="track-card-scope">{track.scope}</p>
+          <p className="track-card-description">{track.description}</p>
+          <span className="track-card-action">{selectedTrack === track.id ? 'Đã chọn · Đi tới đăng ký' : 'Chọn hướng này'} <Icon name="arrow" size={18}/></span>
+        </a>)}
+      </div>
+      <div className="tracks-bottom"><strong>Chọn một hướng để bắt đầu.</strong><span>Các thành viên sẽ phối hợp liên ngành để xây dựng một hệ thống hoàn chỉnh.</span><a href="#join">Đăng ký tham gia <Icon name="arrow" size={18}/></a></div>
+    </div>
+  </section>;
+}
+
 const learningCards=[
-  {num:'01',icon:'chip',title:'Hệ thống nhúng',tag:'Nền tảng phần cứng.',points:['Vi điều khiển & RTOS','Cảm biến & điều khiển'],image:'embedded.webp',theme:'blue'},
-  {num:'02',icon:'cloud',title:'IoT & Backend',tag:'Kết nối thiết bị và dữ liệu.',points:['MQTT & API','Máy chủ & cơ sở dữ liệu'],image:'backend.webp',theme:'sand'},
-  {num:'03',icon:'phone',title:'Ứng dụng Web & Mobile',tag:'Giám sát hệ thống từ xa.',points:['Flutter / React','Giao diện giám sát'],image:'mobile.webp',theme:'mint'},
-  {num:'04',icon:'brain',title:'AI & Bảo trì thông minh',tag:'Biến dữ liệu thành tri thức.',points:['Phân tích dự đoán','Phát hiện sự cố'],image:'ai.webp',theme:'lilac'}
+  {num:'01',icon:'chip',title:'Embedded Systems',tag:'Hardware & Firmware.',points:['Vi điều khiển & RTOS','Cảm biến & điều khiển'],image:'embedded.webp',theme:'blue'},
+  {num:'02',icon:'cloud',title:'Web Application',tag:'Backend · Frontend · Database.',points:['MQTT, API & Backend','Giao diện web & cơ sở dữ liệu'],image:'backend.webp',theme:'sand'},
+  {num:'03',icon:'phone',title:'Mobile Application',tag:'Ứng dụng giám sát di động.',points:['Flutter & ứng dụng đa nền tảng','Tương tác thiết bị từ xa'],image:'mobile.webp',theme:'mint'},
+  {num:'04',icon:'brain',title:'AI & Predictive Maintenance',tag:'Biến dữ liệu thành tri thức.',points:['Phân tích & học máy','Phát hiện bất thường, dự báo'],image:'ai.webp',theme:'lilac'}
 ];
 const journey=[['chip','Nền tảng','Kiến thức cốt lõi'],['wrench','Thực hành','Bài lab & dự án nhỏ'],['box','Dự án','Phát triển hệ thống'],['bars','Phát triển','Hợp tác & chia sẻ']];
 function Learning(){return <section id="learning" className="section learning-section"><div className="container">
   <div className="section-split learning-top"><div className="intro-copy"><div className="kicker">LỘ TRÌNH HỌC TẬP <span className="kicker-line"/></div>
     <h2>Học bài bản<br/>Rèn <span className="text-blue">kỹ năng thực tế.</span></h2>
-    <p>Từ kiến thức nền tảng đến thực hành, phát triển dự án và triển khai hệ thống thực tế.</p>
+    <p>Mỗi thành viên chọn một hướng chuyên môn chính, học từ nền tảng đến dự án thực tế và phối hợp với các lĩnh vực khác khi phát triển hệ thống.</p>
     <div className="button-row"><Cta href="#learning-grid">Khám phá lộ trình</Cta><a className="video-link" href="#journey"><span><Icon name="play" size={18}/></span> Xem hành trình học</a></div>
   </div><div className="learning-art"><img src={A+'learning-system.webp'} alt="Vi điều khiển kết nối máy tính phát triển phần mềm và ứng dụng giám sát" loading="lazy"/></div></div>
   <div className="learning-grid" id="learning-grid">{learningCards.map(c=><article className={'learning-card '+c.theme} key={c.num}>
@@ -222,14 +258,59 @@ function Roadmap(){
     </div>
   </section>;
 }
-function Join(){const [form,setForm]=useState({name:'',year:'',phone:'',email:''});const [submitted,setSubmitted]=useState(false);const change=(field,value)=>{setForm(o=>({...o,[field]:value}));setSubmitted(false);};const thisYear=new Date().getFullYear();return <section id="join" className="section join-section"><div className="container join-grid"><div className="join-intro"><div className="kicker">THAM GIA CÙNG CHÚNG TÔI <span className="kicker-line"/></div><h2>Gia nhập<br/><span className="text-blue">nhóm của chúng tôi</span></h2><p>Điền thông tin để đăng ký tìm hiểu và tham gia hoạt động của nhóm.</p><img src={A+'join-hardware.webp'} alt="Thiết bị điện tử thử nghiệm trên bàn làm việc tại phòng lab" loading="lazy"/></div>
- <form className="join-form" onSubmit={e=>{e.preventDefault();setSubmitted(true);}}><div className="form-title"><span className="round-icon"><Icon name="user" size={31}/></span><div><h3>Thông tin đăng ký</h3><p>Chia sẻ một vài thông tin để chúng tôi liên hệ.</p></div></div>
-  <label>Họ và tên<div className="input-wrap"><Icon name="user"/><input required autoComplete="name" placeholder="Nhập họ và tên của bạn" value={form.name} onChange={e=>change('name',e.target.value)}/></div></label>
-  <label>Năm nhập học<div className="input-wrap"><Icon name="calendar"/><select required value={form.year} onChange={e=>change('year',e.target.value)}><option value="">Chọn năm nhập học</option>{Array.from({length:9},(_,i)=>thisYear+1-i).map(y=><option value={y} key={y}>{y}</option>)}</select></div></label>
-  <label>Số điện thoại<div className="input-wrap"><Icon name="phone"/><input required inputMode="tel" type="tel" pattern="[+0-9() .-]{9,20}" autoComplete="tel" placeholder="Nhập số điện thoại" value={form.phone} onChange={e=>change('phone',e.target.value)}/></div></label>
-  <label>Email<div className="input-wrap"><Icon name="email"/><input required type="email" autoComplete="email" placeholder="Nhập email của bạn" value={form.email} onChange={e=>change('email',e.target.value)}/></div></label>
-  <button className="btn btn-primary submit-btn" type="submit">Gửi đăng ký <Icon name="arrow" size={21}/></button>
-  {submitted && <div role="status" className="form-notice">Đây là bản demo giao diện. Chưa có dữ liệu nào được gửi hoặc lưu. Cần kết nối API để nhận đăng ký.</div>}
- </form></div></section>}
+function Join({ selectedTrack, onSelectTrack }) {
+  const [step, setStep] = useState(1);
+  const [form, setForm] = useState({name:'',year:'',phone:'',email:''});
+  const [submitted, setSubmitted] = useState(false);
+  const change = (field,value) => {setForm(old => ({...old,[field]:value}));setSubmitted(false);};
+  const thisYear = new Date().getFullYear();
+  const track = specializations.find(item => item.id === selectedTrack);
+  const goNext = () => {if (track) {setStep(2);setSubmitted(false);}};
+  const submit = (event) => {
+    event.preventDefault();
+    if (step !== 2 || !track) {setStep(1);return;}
+    // The current landing page has no submission API; never imply the form has been delivered.
+    setSubmitted(true);
+  };
+  return <section id="join" className="section join-section">
+    <div className="container join-grid">
+      <div className="join-intro">
+        <div className="kicker">THAM GIA CÙNG CHÚNG TÔI <span className="kicker-line"/></div>
+        <h2>Chọn hướng.<br/><span className="text-blue">Cùng phát triển.</span></h2>
+        <p>Ứng tuyển vào Lab bắt đầu bằng việc chọn <strong>một lĩnh vực chuyên môn chính</strong>, sau đó cung cấp thông tin liên hệ.</p>
+        <img src={A+'join-hardware.webp'} alt="Thiết bị điện tử thử nghiệm trên bàn làm việc tại phòng lab" loading="lazy"/>
+      </div>
+      <form className="join-form" onSubmit={submit}>
+        <div className="join-step-header"><span>ĐĂNG KÝ THAM GIA</span><span>Bước {step} / 2</span></div>
+        <div className="join-progress" aria-label={'Tiến độ đăng ký: bước '+step+' trên 2'}><span className={step >= 1 ? 'progress-on' : ''}/><span className={step === 2 ? 'progress-on' : ''}/></div>
+        {step === 1 ? <>
+          <div className="form-title"><span className="round-icon"><Icon name="target" size={28}/></span><div><h3>Chọn lĩnh vực của bạn</h3><p>Bắt buộc chọn 1 trong 4 hướng chuyên môn.</p></div></div>
+          <fieldset className="join-track-fieldset">
+            <legend className="visually-hidden">Lĩnh vực chuyên môn chính</legend>
+            <div className="join-track-grid">{specializations.map(item => <label className={'join-track-option'+(selectedTrack===item.id?' is-selected':'')} key={item.id}>
+              <input type="radio" name="specialization" value={item.id} checked={selectedTrack===item.id} onChange={()=>{onSelectTrack(item.id);setSubmitted(false);}}/>
+              <span className="join-track-icon"><Icon name={item.icon} size={24}/></span>
+              <span className="join-track-text"><strong>{item.name}</strong><small>{item.scope}</small></span>
+              <span className="join-track-indicator" aria-hidden="true"><Icon name="check" size={14}/></span>
+            </label>)}</div>
+          </fieldset>
+          <p className="join-help">Bạn sẽ tập trung vào lĩnh vực đã chọn và có cơ hội hợp tác với các nhóm chuyên môn khác.</p>
+          <button className="btn btn-primary submit-btn" type="button" onClick={goNext} disabled={!track}>Tiếp tục điền thông tin <Icon name="arrow" size={20}/></button>
+        </> : <>
+          <div className="form-title"><span className="round-icon"><Icon name="user" size={28}/></span><div><h3>Thông tin đăng ký</h3><p>Chia sẻ thông tin để nhóm liên hệ với bạn.</p></div></div>
+          <div className="join-selected-track"><span><small>HƯỚNG CHUYÊN MÔN ĐÃ CHỌN</small><strong>{track?.name}</strong></span><button type="button" onClick={()=>{setStep(1);setSubmitted(false);}}>Thay đổi</button></div>
+          <input type="hidden" name="specialization" value={selectedTrack}/>
+          <label>Họ và tên<div className="input-wrap"><Icon name="user"/><input required autoComplete="name" placeholder="Nhập họ và tên của bạn" value={form.name} onChange={e=>change('name',e.target.value)}/></div></label>
+          <label>Năm nhập học<div className="input-wrap"><Icon name="calendar"/><select required value={form.year} onChange={e=>change('year',e.target.value)}><option value="">Chọn năm nhập học</option>{Array.from({length:9},(_,i)=>thisYear+1-i).map(y=><option value={y} key={y}>{y}</option>)}</select></div></label>
+          <label>Số điện thoại<div className="input-wrap"><Icon name="phone"/><input required inputMode="tel" type="tel" pattern="[+0-9() .-]{9,20}" autoComplete="tel" placeholder="Nhập số điện thoại" value={form.phone} onChange={e=>change('phone',e.target.value)}/></div></label>
+          <label>Email<div className="input-wrap"><Icon name="email"/><input required type="email" autoComplete="email" placeholder="Nhập email của bạn" value={form.email} onChange={e=>change('email',e.target.value)}/></div></label>
+          <div className="join-form-actions"><button className="join-back" type="button" onClick={()=>{setStep(1);setSubmitted(false);}}>Quay lại</button><button className="btn btn-primary submit-btn" type="submit">Gửi đăng ký <Icon name="arrow" size={20}/></button></div>
+          {submitted && <div role="status" className="form-notice">Đây là bản demo giao diện. Thông tin và hướng chuyên môn của bạn chưa được gửi hoặc lưu. Cần kết nối API để tiếp nhận đăng ký.</div>}
+        </>}
+        <p className="join-demo-note">Biểu mẫu hiện là bản demo, chưa gửi dữ liệu về Lab.</p>
+      </form>
+    </div>
+  </section>;
+}
 function Footer(){return <footer className="footer"><div className="container footer-inner"><Logo/><span>Học · Xây dựng · Triển khai</span><a href="#home">Lên đầu trang ↑</a></div></footer>}
-export default function App(){return <><Header/><main><Hero/><AboutPreview/><About/><Learning/><Projects/><Roadmap/><Join/></main><Footer/></>}
+export default function App(){const [selectedTrack,setSelectedTrack]=useState('');return <><Header/><main><Hero/><AboutPreview/><About/><Tracks selectedTrack={selectedTrack} onSelectTrack={setSelectedTrack}/><Learning/><Projects/><Roadmap/><Join selectedTrack={selectedTrack} onSelectTrack={setSelectedTrack}/></main><Footer/></>}
