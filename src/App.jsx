@@ -157,19 +157,53 @@ function Projects(){const [filter,setFilter]=useState('All'); const cards=useMem
  <div className="project-grid">{cards.map(c=><article key={c.title} className="project-card"><div className="project-image"><img src={A+c.img} alt="" loading="lazy"/><span className="project-type-icon"><Icon name={c.icon} size={28}/></span></div><div className="project-description"><h3>{c.title}</h3><p>{c.text}</p><div className="project-foot"><div className="tags">{c.tags.map(t=><span key={t}>{t}</span>)}</div><a href="#join" className="circle-link" aria-label={'Discuss '+c.title}><Icon name="arrow" size={18}/></a></div></div></article>)}</div>
  <div className="collab-banner"><span className="collab-icon"><Icon name="bulb" size={32}/></span><div><h3>Have an idea?</h3><p>We are open to collaboration and real-world challenges.</p></div><Cta href="#join">Work With Us</Cta></div>
  </div></section>}
-const milestones=[
- {num:'01',name:'Learn & Build Foundations',sub:'Core skills and hands-on mini projects.',stage:'Foundation',pill:'Embedded · IoT',img:'roadmap-one.webp'},
- {num:'02',name:'Develop Real Systems',sub:'Build and integrate working prototypes.',stage:'Development',pill:'Robotics · LoRa',img:'roadmap-two.webp'},
- {num:'03',name:'Scale & Apply',sub:'Deploy in real environments and solve practical problems.',stage:'Application',pill:'Deployment · Data',img:'roadmap-three.webp'},
- {num:'04',name:'Create Lasting Impact',sub:'Open solutions, collaboration, and broader applications.',stage:'Long term',pill:'Industry · Research',img:'roadmap-four.webp'}
+const milestones = [
+  {num:'01',name:'Learn & Build Foundations',sub:'Core skills and hands-on mini projects.',year:'2025 – 2026',tags:['Embedded','IoT Basics'],img:'roadmap-one.webp',accent:'blue'},
+  {num:'02',name:'Develop Real Systems',sub:'Build and integrate working prototypes.',year:'2026 – 2027',tags:['Robotics','LoRa / Wireless'],img:'roadmap-two.webp',accent:'mint'},
+  {num:'03',name:'Scale & Apply',sub:'Deploy in real environments and solve practical problems.',year:'2027 – 2028',tags:['Real-world Deployment','Data & AI'],img:'roadmap-three.webp',accent:'gold'},
+  {num:'04',name:'Create Lasting Impact',sub:'Open solutions, collaboration, and broader applications.',year:'2028+',tags:['Open Source','Industry & Society'],img:'roadmap-four.webp',accent:'purple'}
 ];
-function Roadmap(){return <section id="roadmap" className="section roadmap-section"><div className="container">
-  <div className="roadmap-top"><div className="kicker">ROADMAP <span className="kicker-line"/></div><h2>From Learning<br/>to <span className="text-blue">Real Impact</span></h2><p>A step-by-step journey to build skills, develop real systems, and create lasting impact.</p></div>
-  <div className="roadmap-scene"><div className="roadmap-mountain"/><svg className="roadmap-path" viewBox="0 0 1400 290" preserveAspectRatio="none" aria-hidden="true"><path d="M-50 251 C150 282 200 285 360 254 S650 238 760 181 S970 160 1070 105 S1270 130 1440 3" fill="none" stroke="#ffffff" strokeWidth="10" strokeLinecap="round"/><path d="M-50 251 C150 282 200 285 360 254 S650 238 760 181 S970 160 1070 105 S1270 130 1440 3" fill="none" stroke="#dee9fc" strokeWidth="1.5" strokeLinecap="round" strokeDasharray="4 6"/></svg>
-  <div className="roadmap-items">{milestones.map((m,i)=><article className={'milestone milestone-'+(i+1)} key={m.num}><div className="milestone-head"><span>{m.num}</span><div><h3>{m.name}</h3><p>{m.sub}</p></div></div><div className="milestone-media"><img src={A+m.img} alt="" loading="lazy"/><div className="milestone-tags">{m.pill.split(' · ').map(t=><span key={t}>{t}</span>)}</div></div><div className="milestone-dot"/><div className="milestone-stage">{m.stage}</div></article>)}</div>
-  </div>
-  <div className="roadmap-benefits">{[['bars','Skill Growth','From fundamentals to advanced systems.'],['gear','Real-world Projects','From ideas to working prototypes.'],['people','Long-term Impact','Research, collaboration and applications.']].map(([icon,title,desc])=><div className="benefit" key={title}><span className="round-icon"><Icon name={icon} size={31}/></span><div><h3>{title}</h3><p>{desc}</p></div></div>)}</div>
-</div></section>}
+function Roadmap(){
+  return <section id="roadmap" className="section roadmap-section">
+    <div className="container roadmap-layout">
+      <div className="roadmap-top">
+        <div className="kicker">ROADMAP <span className="kicker-line"/></div>
+        <h2>From Learning<br/>to <span className="text-blue">Real Impact</span></h2>
+        <p>A step-by-step journey to build skills, develop real systems, and create lasting impact.</p>
+      </div>
+      <div className="roadmap-scene">
+        <div className="roadmap-mountain" aria-hidden="true"/>
+        <svg className="roadmap-path" viewBox="0 0 1536 786" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M-20 705 C130 713 168 718 226 707 S450 691 572 682 S790 629 904 643 S1050 616 1120 566 S1190 526 1253 516 S1410 480 1556 426" fill="none" stroke="white" strokeWidth="12" strokeLinecap="round"/>
+        </svg>
+        <div className="roadmap-items">
+          {milestones.map((m,i)=><article className={'milestone milestone-'+(i+1)} key={m.num}>
+            <div className="milestone-head">
+              <span className={'milestone-count milestone-count-'+m.accent}>{m.num}</span>
+              <div><h3>{m.name}</h3><p>{m.sub}</p></div>
+            </div>
+            <div className="milestone-media">
+              <img src={A+m.img} alt="" loading="lazy"/>
+              <div className="milestone-tags">{m.tags.map(t=><span key={t}>{t}</span>)}</div>
+            </div>
+            <div className={'milestone-dot milestone-dot-'+m.accent}/>
+            <div className={'milestone-year milestone-year-'+m.accent}>{m.year}</div>
+          </article>)}
+        </div>
+      </div>
+      <div className="roadmap-benefits">
+        {[
+          ['bars','Skill Growth','From fundamental knowledge to advanced systems.'],
+          ['gear','Real-world Projects','From ideas to working prototypes and deployments.'],
+          ['people','Long-term Impact','Contribute to research, open source, and real-world applications.']
+        ].map(([icon,title,desc])=><div className="benefit" key={title}>
+          <span className="round-icon"><Icon name={icon} size={31}/></span>
+          <div><h3>{title}</h3><p>{desc}</p></div>
+        </div>)}
+      </div>
+    </div>
+  </section>;
+}
 function Join(){const [form,setForm]=useState({name:'',year:'',phone:'',email:''});const [submitted,setSubmitted]=useState(false);const change=(field,value)=>{setForm(o=>({...o,[field]:value}));setSubmitted(false);};const thisYear=new Date().getFullYear();return <section id="join" className="section join-section"><div className="container join-grid"><div className="join-intro"><div className="kicker">JOIN US <span className="kicker-line"/></div><h2>Be Part of<br/><span className="text-blue">Our Team</span></h2><p>Fill in the form to express your interest in joining our lab.</p><img src={A+'join-hardware.webp'} alt="Electronics prototyping equipment on a lab desk" loading="lazy"/></div>
  <form className="join-form" onSubmit={e=>{e.preventDefault();setSubmitted(true);}}><div className="form-title"><span className="round-icon"><Icon name="user" size={31}/></span><div><h3>Application Form</h3><p>Let us know a bit about you.</p></div></div>
   <label>Họ và tên<div className="input-wrap"><Icon name="user"/><input required autoComplete="name" placeholder="Nhập họ và tên của bạn" value={form.name} onChange={e=>change('name',e.target.value)}/></div></label>
