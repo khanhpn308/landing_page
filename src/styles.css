@@ -35,3 +35,7 @@
   .header-cta{max-width:122px}
   .intro-copy,.join-intro{min-width:0}
 }
+
+/* Small phones: keep the header within 320 px. */
+.nav>a.mobile-nav-join{display:none}
+@media(max-width:360px){.header-cta{display:none}.nav.nav-open>a.mobile-nav-join{display:flex}}
