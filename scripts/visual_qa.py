@@ -14,6 +14,7 @@ import json
 import sys
 from pathlib import Path
 from urllib.request import urlopen
+from urllib.parse import parse_qs, urlsplit
 from PIL import Image, ImageChops, ImageEnhance, ImageStat
 from playwright.sync_api import sync_playwright
 
@@ -318,14 +319,42 @@ def main():
             ])
             if not report["interactions"]["specializationFlow"]:
                 report["findings"].append("Specialization selection or two-step flow failed")
+            # Netlify Forms is not active under the local Vite server. Intercept
+            # the real React POST, inspect the payload, and return a successful
+            # response without contacting Netlify or creating real submissions.
+            received=[]
+            def capture_submission(route):
+                request=route.request
+                if (request.method=="POST" and urlsplit(request.url).path=="/"):
+                    data=parse_qs(request.post_data or "", keep_blank_values=True)
+                    received.append({key:values[-1] for key,values in data.items()})
+                    route.fulfill(status=200, content_type="text/plain", body="OK")
+                else:
+                    route.continue_()
+            page.route("**/*", capture_submission)
             page.locator('#join input[autocomplete="name"]').fill("QA Test")
             page.locator('#join select').select_option(index=1)
+            expected_year=page.locator('#join select').input_value()
             page.locator('#join input[type="tel"]').fill("0912345678")
             page.locator('#join input[type="email"]').fill("qa@example.com")
             page.locator('#join button[type="submit"]').click()
             notice=page.locator('#join [role="status"]')
-            report["interactions"]["demoForm"]=(notice.is_visible() and
-                "chưa được gửi hoặc lưu" in notice.inner_text())
+            notice.wait_for(state="visible", timeout=8000)
+            payload=received[-1] if received else {}
+            report["interactions"]["netlifyForm"]=(
+                "Đăng ký đã được gửi" in notice.inner_text() and
+                payload.get("form-name")=="join-us" and
+                payload.get("specialization")=="AI & Predictive Maintenance" and
+                payload.get("name")=="QA Test" and
+                payload.get("year")==expected_year and
+                payload.get("phone")=="0912345678" and
+                payload.get("email")=="qa@example.com" and
+                payload.get("bot-field")==""
+            )
+            if not report["interactions"]["netlifyForm"]:
+                report["findings"].append(
+                    f"Netlify Forms mocked submission failed: receivedFields={sorted(payload.keys())}"
+                )
             if not all(report["interactions"].values()):
                 report["findings"].append("Interaction test failed")
         except Exception as exc:
