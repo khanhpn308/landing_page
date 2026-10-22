@@ -100,7 +100,7 @@ function Hero(){return <section id="home" className="hero">
 </section>}
 
 function AboutPreview(){return <section className="about-preview"><div className="container about-preview-grid">
-  <div className="about-preview-copy"><div className="kicker">VỀ CHÚNG TÔI <span className="kicker-line"/></div>
+  <div className="about-preview-copy">
     <h2>Giải quyết bài toán thực tế<br/>bằng công nghệ ứng dụng</h2>
     <p>Chúng tôi là nhóm sinh viên và kỹ sư cùng nghiên cứu, xây dựng hệ thống máy tự động và IoT hướng tới công nghiệp thông minh.</p>
     <a href="#about" className="preview-learn">Tìm hiểu thêm <Icon name="arrow" size={18}/></a>
