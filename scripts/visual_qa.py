@@ -77,7 +77,7 @@ def mobile_composition(page):
         joinPhotoBelowCopy: !overlap(intro,joinImg) && joinImg.top>=intro.bottom-2,
         projectCopyContained: inside(projectCopy,project),
         mobileHeroUsesCleanAsset: getComputedStyle(document.querySelector('.hero-bg')).backgroundImage.includes('hero-machines.webp'),
-        mobileAboutUsesCleanAsset: getComputedStyle(document.querySelector('.about-preview-photo')).backgroundImage.includes('about-team.webp')
+        mobileAboutUsesCleanAsset: getComputedStyle(document.querySelector('.about-preview-photo')).backgroundImage.includes('join-hardware.webp')
       };
     }""")
 
