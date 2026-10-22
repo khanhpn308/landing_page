@@ -61,3 +61,32 @@ python scripts/visual_regression.py --url http://localhost:5173 \
 - Kiểm tra bằng Chrome Zoom **100%** (Ctrl+0); mockup tham chiếu 1536×1024, browser screenshot ở zoom khác làm kích thước trông sai.
 
 Bản này vẫn là starter. Cần hiệu chỉnh tiếp sau khi có ảnh screenshot trình duyệt tại zoom 100%.
+
+
+## Visual QA desktop + mobile (branch qa/visual-desktop-mobile-v1)
+
+Chạy hai terminal trong thư mục dự án. Terminal 1:
+
+```bash
+npm ci
+npm run dev
+```
+
+Terminal 2 (đã tạo và kích hoạt `.venv`):
+
+```bash
+source .venv/bin/activate
+python -m pip install playwright pillow
+python -m playwright install chromium
+python scripts/visual_qa.py --url http://127.0.0.1:5173
+```
+
+Đầu ra nằm trong `artifacts/visual-qa/`:
+- `home/about/learning/projects/roadmap-actual.png`: ảnh chụp desktop ở **đúng kích thước từng reference** (About: 1672×941; các mẫu khác: 1536×1024).
+- `*-overlay.png`: ảnh chồng 50% bản thật và bản mẫu; `*-diff.png`: heatmap sai lệch.
+- `768x1024-*.png`, `390x844-*.png`, `320x700-*.png`: hình tablet, mobile và small-mobile.
+- `REPORT.md`, `results.json`: chỉ số chênh lệch pixel, cảnh báo tràn ngang, ảnh lỗi, anchor lỗi và kết quả thử tương tác.
+
+**Quy trình nghiệm thu:** chụp ở Chrome zoom 100%, kiểm tra Hero → About → Learning → Projects → Roadmap; chỉnh CSS theo overlay và chạy lại. Điểm khác biệt pixel là tín hiệu chẩn đoán, **không** thể dùng để chứng minh pixel-perfect tuyệt đối vì nguồn tham chiếu là ảnh AI.
+
+**Trạng thái:** các chỉnh sửa CSS và kịch bản QA ở đây chưa được xác nhận trên trình duyệt WSL của bạn; phải chạy lệnh trên và review ảnh trước khi merge. Form Join Us vẫn chỉ là demo.
