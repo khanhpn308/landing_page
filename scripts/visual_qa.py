@@ -124,11 +124,15 @@ def main():
                           const b=document.querySelector('.roadmap-background');
                           const p=document.querySelector('.roadmap-path');
                           const nodes=document.querySelector('.roadmap-items');
-                          const end=p.querySelector('.roadmap-path-summit');
-                          const v=end.getPointAtLength(end.getTotalLength());
+                          const paths=[...p.querySelectorAll('path')];
+                          const road=paths[0];
+                          const v=road.getPointAtLength(road.getTotalLength());
                           const rect=b.getBoundingClientRect();
                           return {
                             endpoint:[Math.round(v.x),Math.round(v.y)],
+                            pathCount:paths.length,
+                            strokeWidth:parseFloat(getComputedStyle(road).strokeWidth),
+                            stroke:getComputedStyle(road).stroke,
                             fullBleed: Math.abs(rect.left)<=2 && Math.abs(rect.right-innerWidth)<=2,
                             correctStack: Number(getComputedStyle(b).zIndex)<Number(getComputedStyle(p).zIndex) &&
                               Number(getComputedStyle(p).zIndex)<Number(getComputedStyle(nodes).zIndex),
@@ -138,8 +142,10 @@ def main():
                         }""")
                         if not all((scenery["fullBleed"],scenery["correctStack"],scenery["oldMountainRemoved"],scenery["backgroundCSS"])):
                             checks.append(f"Roadmap layers or panorama incorrect: {scenery}")
-                        if scenery["endpoint"][0]>1460 or scenery["endpoint"][1]>340:
-                            checks.append(f"Roadmap path does not terminate near summit: {scenery['endpoint']}")
+                        if scenery["pathCount"]!=1 or abs(scenery["strokeWidth"]-12)>0.2:
+                            checks.append(f"Roadmap stroke should be a single uniform 12px path: {scenery}")
+                        if abs(scenery["endpoint"][0]-1426)>2 or abs(scenery["endpoint"][1]-268)>2:
+                            checks.append(f"Roadmap path must touch the summit at 1426,268: {scenery['endpoint']}")
                         clearance=page.evaluate("""()=>{
                           const bar=document.querySelector('.roadmap-benefits').getBoundingClientRect();
                           const years=[...document.querySelectorAll('.milestone-year')]
