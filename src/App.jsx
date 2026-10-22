@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import heroReference from '../references/01-hero.png';
 
 const A = '/assets/';
 
@@ -76,7 +77,7 @@ function Header() {
 function Cta({href,children,secondary=false}){return <a href={href} className={'btn '+(secondary?'btn-outline':'btn-primary')}>{children} <Icon name="arrow" size={18}/></a>}
 const focus=[['chip','Embedded Systems'],['cloud','IoT Backend'],['phone','Mobile Applications'],['bars','AI & Smart Maintenance']];
 function Hero(){return <section id="home" className="hero">
-  <div className="hero-bg" role="img" aria-label="Industrial motor and monitoring devices"/>
+  <div className="hero-bg" style={{backgroundImage:`url(${heroReference})`}} role="img" aria-label="Industrial motor and IoT monitoring devices"/>
   <div className="container hero-content">
     <div className="hero-copy">
       <div className="kicker light">LEARN · BUILD · DEPLOY</div>
@@ -86,7 +87,22 @@ function Hero(){return <section id="home" className="hero">
     </div>
     <div className="hero-focus">{focus.map(([icon,label])=><div className="focus-item" key={label}><span className="focus-icon"><Icon name={icon} size={28}/></span><span>{label}</span></div>)}</div>
   </div>
+  <svg className="hero-wave" viewBox="0 0 1536 50" preserveAspectRatio="none" aria-hidden="true"><path d="M0 22 C400 48 920 62 1536 22 L1536 50 L0 50 Z" fill="#fbfdff"/></svg>
 </section>}
+
+function AboutPreview(){return <section className="about-preview"><div className="container about-preview-grid">
+  <div className="about-preview-copy"><div className="kicker">ABOUT US <span className="kicker-line"/></div>
+    <h2>Turning Real-World Problems<br/>into Practical Solutions</h2>
+    <p>We are a group of engineers and students passionate about building autonomous machines and IoT systems for a smarter, safer and more efficient industry.</p>
+    <a href="#about" className="preview-learn">Learn More <Icon name="arrow" size={18}/></a>
+  </div>
+  <div className="about-preview-photo" role="img" aria-label="Hands-on electronic prototyping in the engineering lab" style={{backgroundImage:`url(${heroReference})`}}/>
+  <div className="about-preview-stats">
+    <div className="preview-stat"><span className="preview-stat-icon"><Icon name="people" size={29}/></span><div><strong>10+</strong><span>Team Members</span></div></div>
+    <div className="preview-stat"><span className="preview-stat-icon"><Icon name="book" size={29}/></span><div><strong>4</strong><span>Key Focus Areas</span></div></div>
+    <div className="preview-stat"><span className="preview-stat-icon"><Icon name="target" size={29}/></span><div><strong>1</strong><span>Shared Goal<br/><b>Smarter Industry</b></span></div></div>
+  </div>
+</div></section>}
 const aboutCards=[
   {title:'People',text:'A collaborative team of passionate learners and engineers.',icon:'people',image:'about-people.webp'},
   {title:'Purpose',text:'Connecting engineering knowledge with practical industrial applications.',icon:'bulb',image:'about-purpose.webp'},
@@ -164,4 +180,4 @@ function Join(){const [form,setForm]=useState({name:'',year:'',phone:'',email:''
   {submitted && <div role="status" className="form-notice">Đây là bản demo giao diện. Chưa có dữ liệu nào được gửi hoặc lưu. Cần kết nối API để nhận đăng ký.</div>}
  </form></div></section>}
 function Footer(){return <footer className="footer"><div className="container footer-inner"><Logo/><span>Learn · Build · Deploy</span><a href="#home">Back to top ↑</a></div></footer>}
-export default function App(){return <><Header/><main><Hero/><About/><Learning/><Projects/><Roadmap/><Join/></main><Footer/></>}
+export default function App(){return <><Header/><main><Hero/><AboutPreview/><About/><Learning/><Projects/><Roadmap/><Join/></main><Footer/></>}
