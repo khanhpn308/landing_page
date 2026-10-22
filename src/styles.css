@@ -428,3 +428,11 @@
   .roadmap-mountain{bottom:112px}
 }
 /* The 900px tablet layout intentionally remains a two-column flow. */
+
+
+/* Brand assets: replace the two SVG files in /public/assets/ to update the logo.
+   Keep the name as real selectable text. The Roadmap header uses the light theme. */
+.brand-mark{display:block;object-fit:contain}
+.brand-mark-dark{display:none}
+.site-header:has(.nav>a[href="#roadmap"].active) .brand-mark-light{display:none}
+.site-header:has(.nav>a[href="#roadmap"].active) .brand-mark-dark{display:block}
