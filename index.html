@@ -8,6 +8,15 @@
     <title>Lab for Autonomous Machines & IoT</title>
   </head>
   <body>
+    <!-- Netlify Forms static blueprint: required to detect a React-rendered form at build time. -->
+    <form name="join-us" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="join-us" />
+      <input type="text" name="bot-field" />
+      <input type="text" name="name" />
+      <input type="text" name="year" />
+      <input type="tel" name="phone" />
+      <input type="email" name="email" />
+    </form>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
