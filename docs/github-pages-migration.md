@@ -2,6 +2,8 @@
 
 > Không thay đổi DNS trước khi GitHub Pages build thành công. Source of truth: nhánh `main` trong repository `khanhpn308/landing_page`.
 
+> Formspree ID mặc định hiện đã được tích hợp ở PR migration; không thêm toàn bộ endpoint vào `VITE_FORMSPREE_FORM_ID`.
+
 ## 1. Triển khai GitHub Pages
 
 1. Vào GitHub repository → **Settings → Pages**.
@@ -18,11 +20,10 @@ Github Pages chỉ host file tĩnh, không xử lý POST của form trực tiế
 
 1. Truy cập https://formspree.io → tạo tài khoản Free → tạo form **join-us**.
 2. Chọn email nhận thông báo `contact@lam-i.tech`; xác minh địa chỉ email theo hướng dẫn Formspree. Trước đó phải kiểm tra email forwarding Name.com hoạt động.
-3. Formspree cung cấp endpoint như `https://formspree.io/f/xxxxxxxx`; phần `xxxxxxxx` là **form ID**.
-4. Vào GitHub repository → **Settings → Secrets and variables → Actions → Variables → New repository variable**.
-5. Name: `VITE_FORMSPREE_FORM_ID`. Value: **chỉ form ID**, không nhập cả URL.
-6. Vào **Actions → Deploy React to GitHub Pages → Run workflow** hoặc push code lên `main` để build lại, đưa ID vào bundle frontend.
-7. Trên website thử nghiệm, gửi một bộ dữ liệu kiểm thử không nhạy cảm → xác nhận submission xuất hiện trong Formspree → xác nhận email thông báo đến Gmail qua forwarding.
+3. Formspree hiện đã tạo cho Lab tại `https://formspree.io/f/xvkzejvy`. ID `xvkzejvy` được cấu hình làm **giá trị mặc định trong React**. Bạn **không cần** tạo repository variable để chạy.
+4. (Tùy chọn) Khi đổi sang một form khác, vào **Settings → Secrets and variables → Actions → Variables** và đặt `VITE_FORMSPREE_FORM_ID` bằng ID của form mới, hoặc sửa default trong source.
+5. Vào **Actions → Deploy React to GitHub Pages → Run workflow** hoặc push code lên `main` để build lại.
+6. Trên website thử nghiệm, gửi một bộ dữ liệu kiểm thử không nhạy cảm → xác nhận submission xuất hiện trong Formspree → xác nhận email thông báo đến Gmail qua forwarding.
 
 Không phải API secret: Formspree Form ID được nhúng công khai trong frontend theo kiến trúc dịch vụ. Không đưa API private key hoặc mật khẩu lên biến `VITE_*`.
 
