@@ -117,7 +117,7 @@ function About(){return <section id="about" className="section about-section"><d
       <p>Chúng tôi tin rằng học qua thực hành và nghiên cứu cùng nhau có thể biến những bài toán kỹ thuật phức tạp thành giải pháp hữu ích, giúp sản xuất an toàn và hiệu quả hơn.</p>
       <div className="button-row"><Cta href="#about-values">Câu chuyện của nhóm</Cta><a href="#learning" className="video-link"><span><Icon name="play" size={18}/></span> Khám phá lộ trình học</a></div>
     </div>
-    <div className="about-photo"><img src={A+'about-team.webp'} alt="Sinh viên và kỹ sư nghiên cứu thiết bị điện tử trong phòng lab" loading="lazy"/></div>
+    <div className="about-photo"><img src={A+'about-team.webp'} alt="Sinh viên và kỹ sư nghiên cứu thiết bị điện tử trong phòng lab" loading="lazy"/><div className="glass-quote"><i/>Từ ý tưởng<br/>đến hệ thống thực tế</div></div>
   </div>
   <div className="about-cards" id="about-values">{aboutCards.map(c=><article className="about-card" key={c.title}><img src={A+c.image} alt="" className="card-decoration" loading="lazy"/><div className="round-icon"><Icon name={c.icon} size={29}/></div><h3>{c.title}</h3><p>{c.text}</p><a href="#learning" aria-label={'Tìm hiểu '+c.title} className="circle-link"><Icon name="arrow" size={20}/></a></article>)}</div>
 </div></section>}
@@ -130,7 +130,7 @@ const learningCards=[
 const journey=[['chip','Nền tảng','Kiến thức cốt lõi'],['wrench','Thực hành','Bài lab & dự án nhỏ'],['box','Dự án','Phát triển hệ thống'],['bars','Phát triển','Hợp tác & chia sẻ']];
 function Learning(){return <section id="learning" className="section learning-section"><div className="container">
   <div className="section-split learning-top"><div className="intro-copy"><div className="kicker">LỘ TRÌNH HỌC TẬP <span className="kicker-line"/></div>
-    <h2>Học có lộ trình<br/>Làm chủ <span className="text-blue">kỹ năng thực tế.</span></h2>
+    <h2>Học bài bản<br/>Rèn <span className="text-blue">kỹ năng thực tế.</span></h2>
     <p>Từ kiến thức nền tảng đến thực hành, phát triển dự án và triển khai hệ thống thực tế.</p>
     <div className="button-row"><Cta href="#learning-grid">Khám phá lộ trình</Cta><a className="video-link" href="#journey"><span><Icon name="play" size={18}/></span> Xem hành trình học</a></div>
   </div><div className="learning-art"><img src={A+'learning-system.webp'} alt="Vi điều khiển kết nối máy tính phát triển phần mềm và ứng dụng giám sát" loading="lazy"/></div></div>
@@ -151,7 +151,7 @@ const projectCards=[
 const filters=['Tất cả','Nhúng','IoT','AI & Phần mềm','Hệ thống','Nghiên cứu'];
 function Projects(){const [filter,setFilter]=useState('Tất cả'); const cards=useMemo(()=>projectCards.filter(c=>filter==='Tất cả'||c.type===filter||c.tags.includes(filter)),[filter]);return <section id="projects" className="section projects-section"><div className="container">
  <div className="section-split projects-top"><div className="intro-copy"><div className="kicker">DỰ ÁN <span className="kicker-line"/></div>
-  <h2>Từ ý tưởng<br/>đến <span className="text-blue">hệ thống thực tế.</span></h2>
+  <h2>Từ ý tưởng<br/>đến <span className="text-blue">hệ thống thật.</span></h2>
   <p>Những dự án kết nối kiến thức, nghiên cứu và ứng dụng thực tiễn.</p>
   <div className="button-row"><Cta href="#projects-list">Khám phá dự án</Cta></div>
  </div><div className="featured-project"><img src={A+'project-feature.webp'} alt="Thiết bị thu thập dữ liệu cảm biến IoT công nghiệp" loading="lazy"/><div className="featured-shade"/><div className="featured-content"><div className="kicker light">DỰ ÁN NỔI BẬT</div><h3>Giám sát thiết bị<br/>IoT công nghiệp</h3><p>Kết nối cảm biến, thu thập<br/>và theo dõi dữ liệu thiết bị.</p><div className="featured-tags"><span><Icon name="thermometer" size={20}/> Cảm biến</span><span><Icon name="cloud" size={20}/> IoT</span><span><Icon name="bars" size={20}/> Giám sát</span></div></div></div></div>
