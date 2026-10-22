@@ -97,19 +97,23 @@
   z-index:5;
   top:53px;
   left:30px;
-  max-width:650px;
+  width:min(700px,calc(100% - 60px));
+  max-width:700px;
 }
 .roadmap-top h2{
-  font-size:clamp(49px,4.28vw,66px);
-  line-height:.98;
+  /* Vietnamese has more glyphs than the English headline.
+     Cap font size to preserve the approved two-line Roadmap composition. */
+  font-size:clamp(49px,4.15vw,64px);
+  line-height:1.04;
   font-weight:800;
   letter-spacing:-.055em;
-  margin:20px 0 11px;
+  margin:16px 0 10px;
+  max-width:700px;
 }
 .roadmap-top>p{
   max-width:610px;
-  font-size:19px;
-  line-height:1.48;
+  font-size:18px;
+  line-height:1.42;
   color:#536589;
   margin:0;
 }
@@ -316,8 +320,8 @@
     max-width:none;
   }
   .roadmap-top{left:1.95%}
-  .roadmap-top h2{font-size:clamp(65px,4.28vw,82px)}
-  .roadmap-top>p{font-size:clamp(19px,1.18vw,22px);max-width:760px}
+  .roadmap-top h2{font-size:64px}
+  .roadmap-top>p{font-size:18px;max-width:610px}
   .milestone-head h3{font-size:clamp(19px,1.12vw,22px)}
   .milestone-head p{font-size:clamp(14px,.84vw,16px)}
   /* Keep 786px geometry; scaling only the path caused the original mismatch. */
