@@ -14,6 +14,8 @@ on:
 jobs:
   capture:
     runs-on: ubuntu-latest
+    env:
+      VITE_FORMSPREE_FORM_ID: qa-form-id
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4

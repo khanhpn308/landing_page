@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import heroReference from '../references/01-hero.png';
 
-const A = '/assets/';
+const A = import.meta.env.BASE_URL + 'assets/';
 
 const paths = {
   arrow: <><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></>,
@@ -34,8 +34,8 @@ function Icon({name, size=24, stroke=1.8, className=''}) {
 function Logo() {
   return <a href="#home" className="brand" aria-label="Lab for Autonomous Machines and IoT — Trang chủ">
     {/* Two replaceable vector assets, switched by the header theme in CSS. */}
-    <img className="brand-mark brand-mark-light" src="/assets/logo-light.svg" alt="" width="45" height="45" />
-    <img className="brand-mark brand-mark-dark" src="/assets/logo-dark.svg" alt="" width="45" height="45" />
+    <img className="brand-mark brand-mark-light" src={A+'logo-light.svg'} alt="" width="45" height="45" />
+    <img className="brand-mark brand-mark-dark" src={A+'logo-dark.svg'} alt="" width="45" height="45" />
     <span>Lab for Autonomous<br/>Machines &amp; IoT</span>
   </a>;
 }
@@ -263,6 +263,8 @@ function Join({ selectedTrack, onSelectTrack }) {
   const [form, setForm] = useState({name:'',year:'',phone:'',email:''});
   const [submitStatus, setSubmitStatus] = useState('idle');
   const [botField, setBotField] = useState('');
+  const formspreeId = (import.meta.env.VITE_FORMSPREE_FORM_ID || 'xvkzejvy').trim();
+  const formspreeEndpoint = formspreeId ? 'https://formspree.io/f/' + encodeURIComponent(formspreeId) : '';
   const change = (field,value) => {setForm(old => ({...old,[field]:value}));setSubmitStatus('idle');};
   const thisYear = new Date().getFullYear();
   const track = specializations.find(item => item.id === selectedTrack);
@@ -273,14 +275,20 @@ function Join({ selectedTrack, onSelectTrack }) {
       if (step !== 2 || !track) setStep(1);
       return;
     }
+    if (!formspreeEndpoint) {
+      setSubmitStatus('unavailable');
+      return;
+    }
     setSubmitStatus('sending');
     try {
-      const response = await fetch('/', {
+      const response = await fetch(formspreeEndpoint, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept': 'application/json'
+        },
         body: new URLSearchParams({
-          'form-name': 'join-us',
-          'bot-field': botField,
+          '_gotcha': botField,
           specialization: track.name,
           name: form.name.trim(),
           year: form.year,
@@ -303,10 +311,9 @@ function Join({ selectedTrack, onSelectTrack }) {
         <p>Ứng tuyển vào Lab bắt đầu bằng việc chọn <strong>một lĩnh vực chuyên môn chính</strong>, sau đó cung cấp thông tin liên hệ.</p>
         <img src={A+'join-hardware.webp'} alt="Thiết bị điện tử thử nghiệm trên bàn làm việc tại phòng lab" loading="lazy"/>
       </div>
-      <form className="join-form" name="join-us" method="POST" data-netlify="true" netlify-honeypot="bot-field" onSubmit={submit} aria-busy={submitStatus==='sending'}>
-        <input type="hidden" name="form-name" value="join-us" />
+      <form className="join-form" name="join-us" method="POST" action={formspreeEndpoint || undefined} onSubmit={submit} aria-busy={submitStatus==='sending'}>
         <div style={{position:'absolute',left:'-9999px',width:1,height:1,overflow:'hidden'}} aria-hidden="true">
-          <label>Không điền ô này <input name="bot-field" type="text" autoComplete="off" tabIndex={-1} value={botField} onChange={e=>setBotField(e.target.value)}/></label>
+          <label>Không điền ô này <input name="_gotcha" type="text" autoComplete="off" tabIndex={-1} value={botField} onChange={e=>setBotField(e.target.value)}/></label>
         </div>
         <div className="join-step-header"><span>ĐĂNG KÝ THAM GIA</span><span>Bước {step} / 2</span></div>
         <div className="join-progress" aria-label={'Tiến độ đăng ký: bước '+step+' trên 2'}><span className={step >= 1 ? 'progress-on' : ''}/><span className={step === 2 ? 'progress-on' : ''}/></div>
@@ -331,7 +338,8 @@ function Join({ selectedTrack, onSelectTrack }) {
           <label>Năm nhập học<div className="input-wrap"><Icon name="calendar"/><select name="year" required value={form.year} onChange={e=>change('year',e.target.value)}><option value="">Chọn năm nhập học</option>{Array.from({length:9},(_,i)=>thisYear+1-i).map(y=><option value={y} key={y}>{y}</option>)}</select></div></label>
           <label>Số điện thoại<div className="input-wrap"><Icon name="phone"/><input name="phone" required inputMode="tel" type="tel" pattern="[+0-9() .-]{9,20}" autoComplete="tel" maxLength={20} placeholder="Nhập số điện thoại" value={form.phone} onChange={e=>change('phone',e.target.value)}/></div></label>
           <label>Email<div className="input-wrap"><Icon name="email"/><input name="email" required type="email" autoComplete="email" maxLength={254} placeholder="Nhập email của bạn" value={form.email} onChange={e=>change('email',e.target.value)}/></div></label>
-          <div className="join-form-actions"><button className="join-back" type="button" onClick={()=>{setStep(1);setSubmitStatus('idle');}}>Quay lại</button><button className="btn btn-primary submit-btn" type="submit" disabled={submitStatus==='sending'||submitStatus==='success'}>{submitStatus==='sending'?'Đang gửi...':submitStatus==='success'?'Đã gửi đăng ký':'Gửi đăng ký'} <Icon name="arrow" size={20}/></button></div>
+          <div className="join-form-actions"><button className="join-back" type="button" onClick={()=>{setStep(1);setSubmitStatus('idle');}}>Quay lại</button><button className="btn btn-primary submit-btn" type="submit" disabled={!formspreeEndpoint||submitStatus==='sending'||submitStatus==='success'}>{!formspreeEndpoint?'Chưa mở đăng ký':submitStatus==='sending'?'Đang gửi...':submitStatus==='success'?'Đã gửi đăng ký':'Gửi đăng ký'} <Icon name="arrow" size={20}/></button></div>
+          {!formspreeEndpoint && <div role="status" className="form-notice">Chức năng đăng ký đang được cấu hình. Vui lòng quay lại sau.</div>}
           {submitStatus==='success' && <div role="status" className="form-notice">Đăng ký đã được gửi. Nhóm sẽ liên hệ với bạn qua thông tin đã cung cấp.</div>}
           {submitStatus==='error' && <div role="alert" className="form-notice" style={{color:'#a12a2a',background:'#fff2f2',borderColor:'#ffd0d0'}}>Không gửi được đăng ký. Vui lòng thử lại sau.</div>}
         </>}

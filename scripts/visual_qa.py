@@ -319,16 +319,18 @@ def main():
             ])
             if not report["interactions"]["specializationFlow"]:
                 report["findings"].append("Specialization selection or two-step flow failed")
-            # Netlify Forms is not active under the local Vite server. Intercept
+            # Formspree is external to the local Vite server. Intercept
             # the real React POST, inspect the payload, and return a successful
             # response without contacting Netlify or creating real submissions.
             received=[]
             def capture_submission(route):
                 request=route.request
-                if (request.method=="POST" and urlsplit(request.url).path=="/"):
+                if (request.method=="POST" and
+                    urlsplit(request.url).hostname=="formspree.io" and
+                    urlsplit(request.url).path=="/f/qa-form-id"):
                     data=parse_qs(request.post_data or "", keep_blank_values=True)
                     received.append({key:values[-1] for key,values in data.items()})
-                    route.fulfill(status=200, content_type="text/plain", body="OK")
+                    route.fulfill(status=200, content_type="application/json", headers={"Access-Control-Allow-Origin":"*"}, body='{"ok":true}')
                 else:
                     route.continue_()
             page.route("**/*", capture_submission)
@@ -341,19 +343,18 @@ def main():
             notice=page.locator('#join [role="status"]')
             notice.wait_for(state="visible", timeout=8000)
             payload=received[-1] if received else {}
-            report["interactions"]["netlifyForm"]=(
+            report["interactions"]["formspreeForm"]=(
                 "Đăng ký đã được gửi" in notice.inner_text() and
-                payload.get("form-name")=="join-us" and
+                payload.get("_gotcha")=="" and
                 payload.get("specialization")=="AI & Predictive Maintenance" and
                 payload.get("name")=="QA Test" and
                 payload.get("year")==expected_year and
                 payload.get("phone")=="0912345678" and
-                payload.get("email")=="qa@example.com" and
-                payload.get("bot-field")==""
+                payload.get("email")=="qa@example.com"
             )
-            if not report["interactions"]["netlifyForm"]:
+            if not report["interactions"]["formspreeForm"]:
                 report["findings"].append(
-                    f"Netlify Forms mocked submission failed: receivedFields={sorted(payload.keys())}"
+                    f"Formspree mocked submission failed: receivedFields={sorted(payload.keys())}"
                 )
             if not all(report["interactions"].values()):
                 report["findings"].append("Interaction test failed")
