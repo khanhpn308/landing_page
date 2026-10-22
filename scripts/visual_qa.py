@@ -24,7 +24,7 @@ SECTIONS = [
     ("projects", "04-projects.png"),
     ("roadmap", "05-roadmap.png"),
 ]
-MOBILE = [(768, 1024), (390, 844), (320, 700)]
+MOBILE = [(1908, 960), (768, 1024), (390, 844), (320, 700)]
 
 def ready(page, url):
     page.goto(url, wait_until="domcontentloaded", timeout=15000)
