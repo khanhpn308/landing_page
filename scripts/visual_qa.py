@@ -24,7 +24,7 @@ SECTIONS = [
     ("projects", "04-projects.png"),
     ("roadmap", "05-roadmap.png"),
 ]
-MOBILE = [(1908, 960), (768, 1024), (390, 844), (320, 700)]
+MOBILE = [(1908, 960), (1792, 900), (768, 1024), (390, 844), (320, 700)]
 
 def ready(page, url):
     page.goto(url, wait_until="domcontentloaded", timeout=15000)
@@ -54,6 +54,40 @@ def diagnose(page):
         brokenImages:[...document.images].filter(i=>i.complete&&!i.naturalWidth).map(i=>i.getAttribute('src')),
         badAnchors:[...document.querySelectorAll('a[href^="#"]')]
           .map(a=>a.getAttribute('href')).filter(h=>h.length>1&&!document.getElementById(h.slice(1)))
+      };
+    }""")
+
+def roadmap_text_geometry(page):
+    """Guard against Vietnamese headline wrapping into milestone cards."""
+    return page.evaluate("""() => {
+      const section=document.querySelector('#roadmap');
+      const heading=section.querySelector('.roadmap-top h2');
+      const intro=section.querySelector('.roadmap-top>p');
+      const milestones=[...section.querySelectorAll('.milestone')];
+      const lh=parseFloat(getComputedStyle(heading).lineHeight);
+      const lines=heading.getBoundingClientRect().height/lh;
+      const overlap=(a,b)=>{
+        const x=Math.min(a.right,b.right)-Math.max(a.left,b.left);
+        const y=Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top);
+        return x>6 && y>6;
+      };
+      const overlapTargets=[];
+      for(const [n,element] of [['headline',heading],['intro',intro]]){
+        for(const [i,stage] of milestones.entries()){
+          const title=stage.querySelector('.milestone-head').getBoundingClientRect();
+          const photo=stage.querySelector('.milestone-media').getBoundingClientRect();
+          const rect=element.getBoundingClientRect();
+          if(overlap(rect,title) || overlap(rect,photo)){
+            overlapTargets.push(n + ' vs milestone ' + (i+1));
+          }
+        }
+      }
+      return {
+        headingLines:Math.round(lines*100)/100,
+        headlineBottom:Math.round(heading.getBoundingClientRect().bottom),
+        introBottom:Math.round(intro.getBoundingClientRect().bottom),
+        milestone2Top:Math.round(milestones[1].getBoundingClientRect().top),
+        overlaps:overlapTargets
       };
     }""")
 
@@ -101,6 +135,11 @@ def main():
                 metric["viewport"]=[w,h]
                 metric["pixelMAE"]=compare(ref,shot,args.out/section)
                 metric["pageErrors"]=errors
+                if section=="roadmap":
+                    layout=roadmap_text_geometry(page)
+                    metric["roadmapTextGeometry"]=layout
+                    if layout["headingLines"]>2.15 or layout["overlaps"]:
+                        report["findings"].append(f"1536 desktop Vietnamese Roadmap collision: {layout}")
                 report["desktop"][section]=metric
                 if metric["overflow"] or metric["brokenImages"] or metric["badAnchors"] or errors:
                     report["findings"].append(f"{section}: review {metric}")
@@ -120,6 +159,9 @@ def main():
                     page.screenshot(path=str(args.out/f"{key}-{section}.png"),animations="disabled")
                     check=diagnose(page)
                     if section=="roadmap" and w>900:
+                        layout=roadmap_text_geometry(page)
+                        if layout["headingLines"]>2.15 or layout["overlaps"]:
+                            checks.append(f"Roadmap Vietnamese text collision: {layout}")
                         scenery=page.evaluate("""() => {
                           const b=document.querySelector('.roadmap-background');
                           const p=document.querySelector('.roadmap-path');
