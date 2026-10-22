@@ -68,6 +68,7 @@ function Header() {
     <button className="mobile-menu" type="button" onClick={()=>setOpen(!open)} aria-label="Toggle menu" aria-controls="primary-navigation" aria-expanded={open}>☰</button>
     <nav id="primary-navigation" className={'nav '+(open?'nav-open':'')} aria-label="Main navigation">
       {navigation.map(([label,id])=><a key={id} className={active===id?'active':''} href={'#'+id} onClick={()=>{setActive(id);setOpen(false)}}>{label}</a>)}
+      <a href="#join" className="mobile-nav-join" onClick={()=>setOpen(false)}>Join Us</a>
     </nav>
     <a href="#join" className="btn btn-primary header-cta" onClick={()=>{setActive('join');setOpen(false)}}>Join Us <Icon name="arrow" size={18}/></a>
   </div></header>;
