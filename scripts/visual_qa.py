@@ -149,6 +149,20 @@ def main():
         page=browser.new_page(viewport={"width":1366,"height":900})
         try:
             ready(page,args.url)
+            # Branded SVGs must load and switch with the navbar color.
+            focus(page, "home")
+            light=page.locator(".site-header .brand-mark-light")
+            dark=page.locator(".site-header .brand-mark-dark")
+            home_ok=light.is_visible() and not dark.is_visible()
+            focus(page, "roadmap")
+            roadmap_ok=dark.is_visible() and not light.is_visible()
+            assets_ok=page.evaluate("""()=>{
+                return [...document.querySelectorAll('.site-header .brand-mark')]
+                    .every(img => img.complete && img.naturalWidth > 0);
+            }""")
+            report["interactions"]["logoVariants"]=home_ok and roadmap_ok and assets_ok
+            if not report["interactions"]["logoVariants"]:
+                report["findings"].append("Logo theme switching or SVG loading failed")
             page.get_by_role("button",name="IoT",exact=True).click()
             count=page.locator(".project-grid .project-card").count()
             page.get_by_role("button",name="All",exact=True).click()
