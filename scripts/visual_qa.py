@@ -24,7 +24,7 @@ SECTIONS = [
     ("projects", "04-projects.png"),
     ("roadmap", "05-roadmap.png"),
 ]
-MOBILE = [(1908, 960), (1792, 900), (768, 1024), (390, 844), (320, 700)]
+MOBILE = [(1908, 960), (1792, 900), (768, 1024), (430, 932), (390, 844), (360, 780), (320, 700)]
 
 def ready(page, url):
     page.goto(url, wait_until="domcontentloaded", timeout=15000)
@@ -54,6 +54,30 @@ def diagnose(page):
         brokenImages:[...document.images].filter(i=>i.complete&&!i.naturalWidth).map(i=>i.getAttribute('src')),
         badAnchors:[...document.querySelectorAll('a[href^="#"]')]
           .map(a=>a.getAttribute('href')).filter(h=>h.length>1&&!document.getElementById(h.slice(1)))
+      };
+    }""")
+
+def mobile_composition(page):
+    """Structural checks that overflow-only QA missed on phones."""
+    return page.evaluate("""() => {
+      const rect = s => document.querySelector(s)?.getBoundingClientRect();
+      const hero = rect('.hero'), cta = rect('.hero .button-row');
+      const focus = rect('.hero-focus'), intro = rect('.join-intro p');
+      const joinImg = rect('.join-intro>img'), project = rect('.featured-project');
+      const projectCopy = rect('.featured-content');
+      const overlap = (a,b) => Boolean(a && b &&
+        Math.min(a.right,b.right)-Math.max(a.left,b.left)>4 &&
+        Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top)>4);
+      const inside = (inner,outer) => Boolean(inner && outer &&
+        inner.left>=outer.left-2 && inner.right<=outer.right+2 &&
+        inner.top>=outer.top-2 && inner.bottom<=outer.bottom+2);
+      return {
+        heroCtaNotCovered: !overlap(cta,focus),
+        heroContentContained: inside(focus,hero),
+        joinPhotoBelowCopy: !overlap(intro,joinImg) && joinImg.top>=intro.bottom-2,
+        projectCopyContained: inside(projectCopy,project),
+        mobileHeroUsesCleanAsset: getComputedStyle(document.querySelector('.hero-bg')).backgroundImage.includes('hero-machines.webp'),
+        mobileAboutUsesCleanAsset: getComputedStyle(document.querySelector('.about-preview-photo')).backgroundImage.includes('join-hardware.webp')
       };
     }""")
 
@@ -200,6 +224,24 @@ def main():
                         checks.append(f"Horizontal overflow in {section}")
                     if check["brokenImages"]:
                         checks.append(f"Broken images in {section}: {check['brokenImages']}")
+                if w<=620:
+                    composition=mobile_composition(page)
+                    if not all(composition.values()):
+                        checks.append(f"Mobile component collision or source-image regression: {composition}")
+                    # Capture complete components as well as the initial viewport;
+                    # the old tests took only the upper 700-844px of a long mobile page.
+                    for label, selector in [
+                        ("hero-full","#home"),
+                        ("about-preview",".about-preview"),
+                        ("tracks-full","#tracks"),
+                        ("project-feature",".featured-project"),
+                        ("join-intro",".join-intro"),
+                        ("join-form",".join-form")
+                    ]:
+                        page.locator(selector).screenshot(
+                            path=str(args.out/f"{key}-{label}.png"),
+                            animations="disabled",timeout=15000
+                        )
                 if w<=1000:
                     if not page.locator(".mobile-menu").is_visible():
                         checks.append("Collapsed navigation toggle missing")
