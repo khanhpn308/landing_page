@@ -374,7 +374,8 @@ def main():
                     if width <= 1000:
                         nav_page.locator(".mobile-menu").click()
                         if target=="join":
-                            anchor=nav_page.locator('.nav a[href="#join"]')
+                            anchor=(nav_page.locator('.nav a[href="#join"]')
+                                    if width<=360 else nav_page.locator(".header-cta"))
                         else:
                             anchor=nav_page.locator(f'.nav a[href="#{target}"]')
                     elif target=="join":
