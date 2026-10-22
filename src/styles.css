@@ -409,3 +409,22 @@
 @media(max-width:900px){
  .roadmap-landscape{left:0;width:100%;opacity:.4}
 }
+
+
+/* Last-mile Roadmap optical alignment and safe widescreen milestone clearance. */
+@media(min-width:1221px){
+  .roadmap-landscape{opacity:.61}
+  .roadmap-top h2{margin-top:20px;margin-bottom:10px}
+  .milestone-4{width:18.75%;max-width:266px}
+  .milestone-4 .milestone-head{transform:translateX(-16px)}
+  .milestone-4 .milestone-dot,
+  .milestone-4 .milestone-year{position:relative;left:39px}
+}
+@media(min-width:1700px){
+  .roadmap-scene{height:900px}
+  .roadmap-path{height:786px}
+  .milestone-4{width:18.75%;max-width:none}
+  .roadmap-landscape{height:900px}
+  .roadmap-mountain{bottom:112px}
+}
+/* The 900px tablet layout intentionally remains a two-column flow. */
