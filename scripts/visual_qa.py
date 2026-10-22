@@ -350,7 +350,7 @@ def main():
                 payload.get("name")=="QA Test" and
                 payload.get("year")==expected_year and
                 payload.get("phone")=="0912345678" and
-                payload.get("email")=="qa@example.com" and
+                payload.get("email")=="qa@example.com"
             )
             if not report["interactions"]["formspreeForm"]:
                 report["findings"].append(
