@@ -102,3 +102,28 @@ Logo hiện là các file SVG riêng, **không** còn vẽ inline trong `src/App
 Thay hai file cùng tên bằng SVG mới, giữ kích thước tỉ lệ `viewBox` phù hợp. Tên "Lab for Autonomous Machines & IoT" vẫn là văn bản HTML trong component `Logo()`, với màu chữ tự đổi theo nền. Để thay cả chữ, chỉnh `src/App.jsx`. Kích thước biểu tượng là `.brand-mark` trong `src/styles.css`. Nếu muốn favicon riêng, sửa `<link rel="icon">` trong `index.html`.
 
 Làm mới Chrome bằng **Ctrl + Shift + R** sau khi đổi file để loại cache SVG.
+
+## Join Us — Four Specialization Tracks (recruitment UX)
+
+Thông điệp tuyển thành viên chính: **Một thành viên – Một hướng chuyên môn chính**.
+
+Các hướng được chọn khi ứng tuyển:
+1. **Embedded Systems** — Hardware / Firmware
+2. **Web Application** — Backend / Frontend / Database
+3. **Mobile Application** — Mobile / Cross-platform
+4. **AI & Predictive Maintenance** — Machine Learning / Data Analytics
+
+Luồng giao diện:
+- Hero có liên kết đến `#tracks`; section **One Lab. Four Tracks.** nằm sau About và trước Learning.
+- Bốn thẻ chuyên môn trỏ đến `#join` và chọn sẵn hướng tương ứng.
+- Bước 1 của Join Us bắt buộc chọn đúng một hướng chuyên môn. Không thể chuyển sang bước 2 nếu chưa chọn.
+- Bước 2 thu thập họ tên, năm nhập học, điện thoại và email; hiển thị hướng đã chọn, cho phép quay lại thay đổi.
+- Trạng thái form được giữ khi chuyển qua lại giữa hai bước.
+- **Không có backend**: nút Gửi đăng ký không gửi/lưu dữ liệu. UI thông báo minh bạch rằng đây là demo. Khi triển khai API, cần gửi `specialization` cùng các trường liên hệ và xử lý loading/success/error thực sự.
+
+Checklist nghiệm thu:
+- Trên desktop, tablet và mobile 320px: bốn thẻ không tràn ngang; menu nav thu gọn khi đủ hẹp.
+- Chọn từng thẻ ở section dẫn về form với đúng lựa chọn; đổi lựa chọn trong form và quay lại bước 1.
+- Không thể đi bước 2 khi chưa chọn hướng. Bước 2 cần nhập đúng tất cả trường bắt buộc.
+- Tab/keyboard và focus ring hoạt động với thẻ, radio, nút Tiếp tục và Quay lại.
+- Chạy `npm ci && npm run build`, kiểm thử giao diện và form ở cả mobile và desktop trước khi merge.
