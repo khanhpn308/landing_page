@@ -263,7 +263,7 @@ function Join({ selectedTrack, onSelectTrack }) {
   const [form, setForm] = useState({name:'',year:'',phone:'',email:''});
   const [submitStatus, setSubmitStatus] = useState('idle');
   const [botField, setBotField] = useState('');
-  const formspreeId = (import.meta.env.VITE_FORMSPREE_FORM_ID || '').trim();
+  const formspreeId = (import.meta.env.VITE_FORMSPREE_FORM_ID || 'xvkzejvy').trim();
   const formspreeEndpoint = formspreeId ? 'https://formspree.io/f/' + encodeURIComponent(formspreeId) : '';
   const change = (field,value) => {setForm(old => ({...old,[field]:value}));setSubmitStatus('idle');};
   const thisYear = new Date().getFullYear();
