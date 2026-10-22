@@ -65,8 +65,8 @@ function Header() {
   }, []);
   return <header className="site-header"><div className="container header-inner">
     <Logo />
-    <button className="mobile-menu" type="button" onClick={()=>setOpen(!open)} aria-label="Toggle menu" aria-expanded={open}>☰</button>
-    <nav className={'nav '+(open?'nav-open':'')} aria-label="Main navigation">
+    <button className="mobile-menu" type="button" onClick={()=>setOpen(!open)} aria-label="Toggle menu" aria-controls="primary-navigation" aria-expanded={open}>☰</button>
+    <nav id="primary-navigation" className={'nav '+(open?'nav-open':'')} aria-label="Main navigation">
       {navigation.map(([label,id])=><a key={id} className={active===id?'active':''} href={'#'+id} onClick={()=>{setActive(id);setOpen(false)}}>{label}</a>)}
     </nav>
     <a href="#join" className="btn btn-primary header-cta" onClick={()=>{setActive('join');setOpen(false)}}>Join Us <Icon name="arrow" size={18}/></a>
@@ -96,11 +96,11 @@ function About(){return <section id="about" className="section about-section"><d
     <div className="intro-copy"><div className="kicker">ABOUT US <span className="kicker-line"/></div>
       <h2>A Team Passionate<br/>about{' '}<span className="text-blue">Real-World<br/>Impact</span></h2>
       <p>We are a group of engineers and students who believe hands-on learning and collaborative research can turn complex engineering challenges into practical solutions for a smarter, safer and more efficient industry.</p>
-      <div className="button-row"><Cta href="#join">Our Story</Cta><a href="#learning" className="video-link"><span><Icon name="play" size={18}/></span> Explore Learning</a></div>
+      <div className="button-row"><Cta href="#about-values">Our Story</Cta><a href="#learning" className="video-link"><span><Icon name="play" size={18}/></span> Explore Learning</a></div>
     </div>
     <div className="about-photo"><img src={A+'about-team.webp'} alt="Engineering students working on electronics in a laboratory" loading="lazy"/></div>
   </div>
-  <div className="about-cards">{aboutCards.map(c=><article className="about-card" key={c.title}><img src={A+c.image} alt="" className="card-decoration" loading="lazy"/><div className="round-icon"><Icon name={c.icon} size={29}/></div><h3>{c.title}</h3><p>{c.text}</p><a href="#learning" aria-label={'Explore '+c.title} className="circle-link"><Icon name="arrow" size={20}/></a></article>)}</div>
+  <div className="about-cards" id="about-values">{aboutCards.map(c=><article className="about-card" key={c.title}><img src={A+c.image} alt="" className="card-decoration" loading="lazy"/><div className="round-icon"><Icon name={c.icon} size={29}/></div><h3>{c.title}</h3><p>{c.text}</p><a href="#learning" aria-label={'Explore '+c.title} className="circle-link"><Icon name="arrow" size={20}/></a></article>)}</div>
 </div></section>}
 const learningCards=[
   {num:'01',icon:'chip',title:'Embedded Systems',tag:'Hardware foundation.',points:['MCU & RTOS','Sensors & Control'],image:'embedded.webp',theme:'blue'},
@@ -136,7 +136,7 @@ function Projects(){const [filter,setFilter]=useState('All'); const cards=useMem
   <p>Selected projects that turn research and learning into practical, real-world solutions.</p>
   <div className="button-row"><Cta href="#projects-list">Explore All Projects</Cta></div>
  </div><div className="featured-project"><img src={A+'project-feature.webp'} alt="Industrial IoT sensor gateway hardware" loading="lazy"/><div className="featured-shade"/><div className="featured-content"><div className="kicker light">FEATURED PROJECT</div><h3>Industrial IoT<br/>Monitoring</h3><p>Industrial sensor networks<br/>and device monitoring.</p><div className="featured-tags"><span><Icon name="thermometer" size={20}/> Sensors</span><span><Icon name="cloud" size={20}/> IoT</span><span><Icon name="bars" size={20}/> Dashboard</span></div></div></div></div>
- <div className="project-filters" id="projects-list" role="group" aria-label="Filter projects">{filters.map(f=><button type="button" key={f} className={filter===f?'selected':''} onClick={()=>setFilter(f)}>{f}</button>)}</div>
+ <div className="project-filters" id="projects-list" role="group" aria-label="Filter projects">{filters.map(f=><button type="button" key={f} aria-pressed={filter===f} className={filter===f?'selected':''} onClick={()=>setFilter(f)}>{f}</button>)}</div>
  <div className="project-grid">{cards.map(c=><article key={c.title} className="project-card"><div className="project-image"><img src={A+c.img} alt="" loading="lazy"/><span className="project-type-icon"><Icon name={c.icon} size={28}/></span></div><div className="project-description"><h3>{c.title}</h3><p>{c.text}</p><div className="project-foot"><div className="tags">{c.tags.map(t=><span key={t}>{t}</span>)}</div><a href="#join" className="circle-link" aria-label={'Discuss '+c.title}><Icon name="arrow" size={18}/></a></div></div></article>)}</div>
  <div className="collab-banner"><span className="collab-icon"><Icon name="bulb" size={32}/></span><div><h3>Have an idea?</h3><p>We are open to collaboration and real-world challenges.</p></div><Cta href="#join">Work With Us</Cta></div>
  </div></section>}
