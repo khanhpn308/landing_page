@@ -39,7 +39,7 @@ function Logo() {
     <span>Lab for Autonomous<br/>Machines &amp; IoT</span>
   </a>;
 }
-const navigation = [['Trang chủ','home'],['Giới thiệu','about'],['Học tập','learning'],['Dự án','projects'],['Lộ trình','roadmap']];
+const navigation = [['Trang chủ','home'],['Giới thiệu','about'],['Chuyên môn','tracks'],['Học tập','learning'],['Dự án','projects'],['Lộ trình','roadmap']];
 function Header() {
   const [active, setActive] = useState('home');
   const [open, setOpen] = useState(false);
