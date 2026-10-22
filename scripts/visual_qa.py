@@ -362,7 +362,46 @@ def main():
             report["findings"].append(f"Interactions: {exc}")
         finally:
             page.close()
-            browser.close()
+        # Actual hash-link clicks must place the START of each section precisely
+        # below the sticky navbar. The former scroll-margin + scroll-padding
+        # double compensation was invisible to the screenshot-only QA.
+        for width,height in [(1366,900),(768,1024),(390,844),(320,700)]:
+            nav_page=browser.new_page(viewport={"width":width,"height":height})
+            try:
+                ready(nav_page,args.url)
+                anchor_errors=[]
+                for target in ["home","about","tracks","learning","projects","roadmap","join"]:
+                    if width <= 1000:
+                        nav_page.locator(".mobile-menu").click()
+                        if target=="join":
+                            anchor=nav_page.locator('.nav a[href="#join"]')
+                        else:
+                            anchor=nav_page.locator(f'.nav a[href="#{target}"]')
+                    elif target=="join":
+                        anchor=nav_page.locator(".header-cta")
+                    else:
+                        anchor=nav_page.locator(f'.nav a[href="#{target}"]')
+                    anchor.click()
+                    nav_page.wait_for_timeout(110)
+                    geometry=nav_page.evaluate("""id => ({
+                        sectionTop:document.getElementById(id).getBoundingClientRect().top,
+                        headerBottom:document.querySelector('.site-header').getBoundingClientRect().bottom,
+                        hash:location.hash,
+                        navOpen:document.querySelector('.nav').classList.contains('nav-open')
+                    })""",target)
+                    if (abs(geometry["sectionTop"]-geometry["headerBottom"])>3 or
+                        geometry["hash"]!="#"+target or
+                        (width<=1000 and geometry["navOpen"])):
+                        anchor_errors.append(f"{target}: {geometry}")
+                key=f"navAnchors_{width}x{height}"
+                report["interactions"][key]=not anchor_errors
+                report["findings"] += [f"{key}: {err}" for err in anchor_errors]
+                print(key,"issues",len(anchor_errors))
+            except Exception as exc:
+                report["findings"].append(f"Navigation anchors {width}x{height}: {exc}")
+            finally:
+                nav_page.close()
+        browser.close()
     (args.out/"results.json").write_text(json.dumps(report,indent=2,ensure_ascii=False),encoding="utf-8")
     lines=["# Visual QA report","","## Desktop reference comparison","","| Section | Pixel MAE | Overlay |","|---|---:|---|"]
     for name,r in report["desktop"].items():
