@@ -158,10 +158,10 @@ function Projects(){const [filter,setFilter]=useState('All'); const cards=useMem
  <div className="collab-banner"><span className="collab-icon"><Icon name="bulb" size={32}/></span><div><h3>Have an idea?</h3><p>We are open to collaboration and real-world challenges.</p></div><Cta href="#join">Work With Us</Cta></div>
  </div></section>}
 const milestones = [
-  {num:'01',name:'Learn & Build Foundations',sub:'Core skills and hands-on mini projects.',year:'2025 – 2026',tags:['Embedded','IoT Basics'],img:'roadmap-one.webp',accent:'blue'},
-  {num:'02',name:'Develop Real Systems',sub:'Build and integrate working prototypes.',year:'2026 – 2027',tags:['Robotics','LoRa / Wireless'],img:'roadmap-two.webp',accent:'mint'},
-  {num:'03',name:'Scale & Apply',sub:'Deploy in real environments and solve practical problems.',year:'2027 – 2028',tags:['Real-world Deployment','Data & AI'],img:'roadmap-three.webp',accent:'gold'},
-  {num:'04',name:'Create Lasting Impact',sub:'Open solutions, collaboration, and broader applications.',year:'2028+',tags:['Open Source','Industry & Society'],img:'roadmap-four.webp',accent:'purple'}
+  {num:'01',name:'Learn & Build Foundations',lines:['Learn & Build','Foundations'],sub:'Core skills and hands-on mini projects.',year:'2025 – 2026',tags:['Embedded','IoT Basics'],img:'roadmap-one.webp',accent:'blue'},
+  {num:'02',name:'Develop Real Systems',lines:['Develop Real','Systems'],sub:'Build and integrate working prototypes.',year:'2026 – 2027',tags:['Robotics','LoRa / Wireless'],img:'roadmap-two.webp',accent:'mint'},
+  {num:'03',name:'Scale & Apply',lines:['Scale & Apply'],sub:'Deploy in real environments and solve practical problems.',year:'2027 – 2028',tags:['Real-world Deployment','Data & AI'],img:'roadmap-three.webp',accent:'gold'},
+  {num:'04',name:'Create Lasting Impact',lines:['Create Lasting','Impact'],sub:'Open solutions, collaboration, and broader applications.',year:'2028+',tags:['Open Source','Industry & Society'],img:'roadmap-four.webp',accent:'purple'}
 ];
 function Roadmap(){
   return <section id="roadmap" className="section roadmap-section">
@@ -207,7 +207,7 @@ function Roadmap(){
           {milestones.map((m,i)=><article className={'milestone milestone-'+(i+1)} key={m.num}>
             <div className="milestone-head">
               <span className={'milestone-count milestone-count-'+m.accent}>{m.num}</span>
-              <div><h3>{m.name}</h3><p>{m.sub}</p></div>
+              <div><h3>{m.lines.map((line,index)=><React.Fragment key={line}>{index>0&&<br/>}{line}</React.Fragment>)}</h3><p>{m.sub}</p></div>
             </div>
             <div className="milestone-media">
               <img src={A+m.img} alt="" loading="lazy"/>
