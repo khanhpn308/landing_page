@@ -144,13 +144,11 @@
   stroke-linejoin:round;
   vector-effect:none;
 }
-.roadmap-path-shadow{
-  stroke:#b7cde8;
-  opacity:.34;
-  stroke-width:22;
+.roadmap-path-route{
+  stroke:#fff;
+  stroke-width:12;
+  opacity:1;
 }
-.roadmap-path-main{stroke:#fff;stroke-width:12}
-.roadmap-path-summit{stroke:#fff;stroke-width:8}
 .roadmap-items{
   position:absolute;
   inset:0;
