@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 58 58" role="img">
+  <title>Lab for Autonomous Machines &amp; IoT</title>
+  <defs>
+    <linearGradient id="mark" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#43b7ff"/>
+      <stop offset=".55" stop-color="#2562f8"/>
+      <stop offset="1" stop-color="#6146ef"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#mark)" d="M28 3 53 47l-11 8-14-24-14 24L3 47Z"/>
+  <path fill="#132d5b" d="m28 17 9 16-9-5-9 5Z"/>
+  <path fill="#5fb9ff" d="m19 33-7 14 16-6Z"/>
+  <path fill="#1c5bde" d="m37 33 7 14-16-6Z"/>
+</svg>

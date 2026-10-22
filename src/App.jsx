@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import heroReference from '../references/01-hero.png';
 
 const A = '/assets/';
 
@@ -32,7 +33,9 @@ function Icon({name, size=24, stroke=1.8, className=''}) {
 }
 function Logo() {
   return <a href="#home" className="brand" aria-label="Lab for Autonomous Machines and IoT — Home">
-    <svg className="brand-mark" viewBox="0 0 58 58" aria-hidden="true"><defs><linearGradient id="logograd" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#43b7ff"/><stop offset=".55" stopColor="#2562f8"/><stop offset="1" stopColor="#6146ef"/></linearGradient></defs><path fill="url(#logograd)" d="M28 3 53 47l-11 8-14-24-14 24L3 47Z"/><path fill="#132d5b" d="m28 17 9 16-9-5-9 5Z"/><path fill="#5fb9ff" d="m19 33-7 14 16-6Z"/><path fill="#1c5bde" d="m37 33 7 14-16-6Z"/></svg>
+    {/* Two replaceable vector assets, switched by the header theme in CSS. */}
+    <img className="brand-mark brand-mark-light" src="/assets/logo-light.svg" alt="" width="45" height="45" />
+    <img className="brand-mark brand-mark-dark" src="/assets/logo-dark.svg" alt="" width="45" height="45" />
     <span>Lab for Autonomous<br/>Machines &amp; IoT</span>
   </a>;
 }
@@ -65,9 +68,10 @@ function Header() {
   }, []);
   return <header className="site-header"><div className="container header-inner">
     <Logo />
-    <button className="mobile-menu" type="button" onClick={()=>setOpen(!open)} aria-label="Toggle menu" aria-expanded={open}>☰</button>
-    <nav className={'nav '+(open?'nav-open':'')} aria-label="Main navigation">
+    <button className="mobile-menu" type="button" onClick={()=>setOpen(!open)} aria-label="Toggle menu" aria-controls="primary-navigation" aria-expanded={open}>☰</button>
+    <nav id="primary-navigation" className={'nav '+(open?'nav-open':'')} aria-label="Main navigation">
       {navigation.map(([label,id])=><a key={id} className={active===id?'active':''} href={'#'+id} onClick={()=>{setActive(id);setOpen(false)}}>{label}</a>)}
+      <a href="#join" className="mobile-nav-join" onClick={()=>setOpen(false)}>Join Us</a>
     </nav>
     <a href="#join" className="btn btn-primary header-cta" onClick={()=>{setActive('join');setOpen(false)}}>Join Us <Icon name="arrow" size={18}/></a>
   </div></header>;
@@ -75,7 +79,7 @@ function Header() {
 function Cta({href,children,secondary=false}){return <a href={href} className={'btn '+(secondary?'btn-outline':'btn-primary')}>{children} <Icon name="arrow" size={18}/></a>}
 const focus=[['chip','Embedded Systems'],['cloud','IoT Backend'],['phone','Mobile Applications'],['bars','AI & Smart Maintenance']];
 function Hero(){return <section id="home" className="hero">
-  <div className="hero-bg" role="img" aria-label="Industrial motor and monitoring devices"/>
+  <div className="hero-bg" style={{backgroundImage:`url(${heroReference})`}} role="img" aria-label="Industrial motor and IoT monitoring devices"/>
   <div className="container hero-content">
     <div className="hero-copy">
       <div className="kicker light">LEARN · BUILD · DEPLOY</div>
@@ -85,7 +89,22 @@ function Hero(){return <section id="home" className="hero">
     </div>
     <div className="hero-focus">{focus.map(([icon,label])=><div className="focus-item" key={label}><span className="focus-icon"><Icon name={icon} size={28}/></span><span>{label}</span></div>)}</div>
   </div>
+  <svg className="hero-wave" viewBox="0 0 1536 50" preserveAspectRatio="none" aria-hidden="true"><path d="M0 22 C400 48 920 62 1536 22 L1536 50 L0 50 Z" fill="#fbfdff"/></svg>
 </section>}
+
+function AboutPreview(){return <section className="about-preview"><div className="container about-preview-grid">
+  <div className="about-preview-copy"><div className="kicker">ABOUT US <span className="kicker-line"/></div>
+    <h2>Turning Real-World Problems<br/>into Practical Solutions</h2>
+    <p>We are a group of engineers and students passionate about building autonomous machines and IoT systems for a smarter, safer and more efficient industry.</p>
+    <a href="#about" className="preview-learn">Learn More <Icon name="arrow" size={18}/></a>
+  </div>
+  <div className="about-preview-photo" role="img" aria-label="Hands-on electronic prototyping in the engineering lab" style={{backgroundImage:`url(${heroReference})`}}/>
+  <div className="about-preview-stats">
+    <div className="preview-stat"><span className="preview-stat-icon"><Icon name="people" size={29}/></span><div><strong>10+</strong><span>Team Members</span></div></div>
+    <div className="preview-stat"><span className="preview-stat-icon"><Icon name="book" size={29}/></span><div><strong>4</strong><span>Key Focus Areas</span></div></div>
+    <div className="preview-stat"><span className="preview-stat-icon"><Icon name="target" size={29}/></span><div><strong>1</strong><span>Shared Goal<br/><b>Smarter Industry</b></span></div></div>
+  </div>
+</div></section>}
 const aboutCards=[
   {title:'People',text:'A collaborative team of passionate learners and engineers.',icon:'people',image:'about-people.webp'},
   {title:'Purpose',text:'Connecting engineering knowledge with practical industrial applications.',icon:'bulb',image:'about-purpose.webp'},
@@ -96,11 +115,11 @@ function About(){return <section id="about" className="section about-section"><d
     <div className="intro-copy"><div className="kicker">ABOUT US <span className="kicker-line"/></div>
       <h2>A Team Passionate<br/>about{' '}<span className="text-blue">Real-World<br/>Impact</span></h2>
       <p>We are a group of engineers and students who believe hands-on learning and collaborative research can turn complex engineering challenges into practical solutions for a smarter, safer and more efficient industry.</p>
-      <div className="button-row"><Cta href="#join">Our Story</Cta><a href="#learning" className="video-link"><span><Icon name="play" size={18}/></span> Explore Learning</a></div>
+      <div className="button-row"><Cta href="#about-values">Our Story</Cta><a href="#learning" className="video-link"><span><Icon name="play" size={18}/></span> Explore Learning</a></div>
     </div>
     <div className="about-photo"><img src={A+'about-team.webp'} alt="Engineering students working on electronics in a laboratory" loading="lazy"/></div>
   </div>
-  <div className="about-cards">{aboutCards.map(c=><article className="about-card" key={c.title}><img src={A+c.image} alt="" className="card-decoration" loading="lazy"/><div className="round-icon"><Icon name={c.icon} size={29}/></div><h3>{c.title}</h3><p>{c.text}</p><a href="#learning" aria-label={'Explore '+c.title} className="circle-link"><Icon name="arrow" size={20}/></a></article>)}</div>
+  <div className="about-cards" id="about-values">{aboutCards.map(c=><article className="about-card" key={c.title}><img src={A+c.image} alt="" className="card-decoration" loading="lazy"/><div className="round-icon"><Icon name={c.icon} size={29}/></div><h3>{c.title}</h3><p>{c.text}</p><a href="#learning" aria-label={'Explore '+c.title} className="circle-link"><Icon name="arrow" size={20}/></a></article>)}</div>
 </div></section>}
 const learningCards=[
   {num:'01',icon:'chip',title:'Embedded Systems',tag:'Hardware foundation.',points:['MCU & RTOS','Sensors & Control'],image:'embedded.webp',theme:'blue'},
@@ -136,23 +155,84 @@ function Projects(){const [filter,setFilter]=useState('All'); const cards=useMem
   <p>Selected projects that turn research and learning into practical, real-world solutions.</p>
   <div className="button-row"><Cta href="#projects-list">Explore All Projects</Cta></div>
  </div><div className="featured-project"><img src={A+'project-feature.webp'} alt="Industrial IoT sensor gateway hardware" loading="lazy"/><div className="featured-shade"/><div className="featured-content"><div className="kicker light">FEATURED PROJECT</div><h3>Industrial IoT<br/>Monitoring</h3><p>Industrial sensor networks<br/>and device monitoring.</p><div className="featured-tags"><span><Icon name="thermometer" size={20}/> Sensors</span><span><Icon name="cloud" size={20}/> IoT</span><span><Icon name="bars" size={20}/> Dashboard</span></div></div></div></div>
- <div className="project-filters" id="projects-list" role="group" aria-label="Filter projects">{filters.map(f=><button type="button" key={f} className={filter===f?'selected':''} onClick={()=>setFilter(f)}>{f}</button>)}</div>
+ <div className="project-filters" id="projects-list" role="group" aria-label="Filter projects">{filters.map(f=><button type="button" key={f} aria-pressed={filter===f} className={filter===f?'selected':''} onClick={()=>setFilter(f)}>{f}</button>)}</div>
  <div className="project-grid">{cards.map(c=><article key={c.title} className="project-card"><div className="project-image"><img src={A+c.img} alt="" loading="lazy"/><span className="project-type-icon"><Icon name={c.icon} size={28}/></span></div><div className="project-description"><h3>{c.title}</h3><p>{c.text}</p><div className="project-foot"><div className="tags">{c.tags.map(t=><span key={t}>{t}</span>)}</div><a href="#join" className="circle-link" aria-label={'Discuss '+c.title}><Icon name="arrow" size={18}/></a></div></div></article>)}</div>
  <div className="collab-banner"><span className="collab-icon"><Icon name="bulb" size={32}/></span><div><h3>Have an idea?</h3><p>We are open to collaboration and real-world challenges.</p></div><Cta href="#join">Work With Us</Cta></div>
  </div></section>}
-const milestones=[
- {num:'01',name:'Learn & Build Foundations',sub:'Core skills and hands-on mini projects.',stage:'Foundation',pill:'Embedded · IoT',img:'roadmap-one.webp'},
- {num:'02',name:'Develop Real Systems',sub:'Build and integrate working prototypes.',stage:'Development',pill:'Robotics · LoRa',img:'roadmap-two.webp'},
- {num:'03',name:'Scale & Apply',sub:'Deploy in real environments and solve practical problems.',stage:'Application',pill:'Deployment · Data',img:'roadmap-three.webp'},
- {num:'04',name:'Create Lasting Impact',sub:'Open solutions, collaboration, and broader applications.',stage:'Long term',pill:'Industry · Research',img:'roadmap-four.webp'}
+const milestones = [
+  {num:'01',name:'Learn & Build Foundations',lines:['Learn & Build','Foundations'],sub:'Core skills and hands-on mini projects.',year:'2025 – 2026',tags:['Embedded','IoT Basics'],img:'roadmap-one.webp',accent:'blue'},
+  {num:'02',name:'Develop Real Systems',lines:['Develop Real','Systems'],sub:'Build and integrate working prototypes.',year:'2026 – 2027',tags:['Robotics','LoRa / Wireless'],img:'roadmap-two.webp',accent:'mint'},
+  {num:'03',name:'Scale & Apply',lines:['Scale & Apply'],sub:'Deploy in real environments and solve practical problems.',year:'2027 – 2028',tags:['Real-world Deployment','Data & AI'],img:'roadmap-three.webp',accent:'gold'},
+  {num:'04',name:'Create Lasting Impact',lines:['Create Lasting','Impact'],sub:'Open solutions, collaboration, and broader applications.',year:'2028+',tags:['Open Source','Industry & Society'],img:'roadmap-four.webp',accent:'purple'}
 ];
-function Roadmap(){return <section id="roadmap" className="section roadmap-section"><div className="container">
-  <div className="roadmap-top"><div className="kicker">ROADMAP <span className="kicker-line"/></div><h2>From Learning<br/>to <span className="text-blue">Real Impact</span></h2><p>A step-by-step journey to build skills, develop real systems, and create lasting impact.</p></div>
-  <div className="roadmap-scene"><div className="roadmap-mountain"/><svg className="roadmap-path" viewBox="0 0 1400 290" preserveAspectRatio="none" aria-hidden="true"><path d="M-50 251 C150 282 200 285 360 254 S650 238 760 181 S970 160 1070 105 S1270 130 1440 3" fill="none" stroke="#ffffff" strokeWidth="10" strokeLinecap="round"/><path d="M-50 251 C150 282 200 285 360 254 S650 238 760 181 S970 160 1070 105 S1270 130 1440 3" fill="none" stroke="#dee9fc" strokeWidth="1.5" strokeLinecap="round" strokeDasharray="4 6"/></svg>
-  <div className="roadmap-items">{milestones.map((m,i)=><article className={'milestone milestone-'+(i+1)} key={m.num}><div className="milestone-head"><span>{m.num}</span><div><h3>{m.name}</h3><p>{m.sub}</p></div></div><div className="milestone-media"><img src={A+m.img} alt="" loading="lazy"/><div className="milestone-tags">{m.pill.split(' · ').map(t=><span key={t}>{t}</span>)}</div></div><div className="milestone-dot"/><div className="milestone-stage">{m.stage}</div></article>)}</div>
-  </div>
-  <div className="roadmap-benefits">{[['bars','Skill Growth','From fundamentals to advanced systems.'],['gear','Real-world Projects','From ideas to working prototypes.'],['people','Long-term Impact','Research, collaboration and applications.']].map(([icon,title,desc])=><div className="benefit" key={title}><span className="round-icon"><Icon name={icon} size={31}/></span><div><h3>{title}</h3><p>{desc}</p></div></div>)}</div>
-</div></section>}
+function Roadmap(){
+  return <section id="roadmap" className="section roadmap-section">
+    <div className="container roadmap-layout">
+      <div className="roadmap-top">
+        <div className="kicker">ROADMAP <span className="kicker-line"/></div>
+        <h2>From Learning<br/>to <span className="text-blue">Real Impact</span></h2>
+        <p>A step-by-step journey to build skills, develop real systems, and create lasting impact.</p>
+      </div>
+      <div className="roadmap-scene">
+        <div className="roadmap-mountain" aria-hidden="true"/>
+        <svg className="roadmap-landscape" viewBox="0 0 1536 786" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="alpine-back" x1="0" y1="0" x2=".15" y2="1">
+              <stop offset="0%" stopColor="#e7f2ff" stopOpacity=".22"/>
+              <stop offset="72%" stopColor="#b6cde8" stopOpacity=".53"/>
+              <stop offset="100%" stopColor="#c9d9eb" stopOpacity=".78"/>
+            </linearGradient>
+            <linearGradient id="alpine-middle" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#91b1d1" stopOpacity=".40"/>
+              <stop offset="100%" stopColor="#9bb6d2" stopOpacity=".72"/>
+            </linearGradient>
+            <linearGradient id="alpine-front" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#809fbf" stopOpacity=".40"/>
+              <stop offset="100%" stopColor="#7897b3" stopOpacity=".64"/>
+            </linearGradient>
+            <linearGradient id="alpine-fog" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#f5faff" stopOpacity="0"/>
+              <stop offset="65%" stopColor="#f0f7ff" stopOpacity=".42"/>
+              <stop offset="100%" stopColor="#f9fcff" stopOpacity=".92"/>
+            </linearGradient>
+            <filter id="alpine-soft"><feGaussianBlur stdDeviation="10"/></filter>
+          </defs>
+          <path d="M-70 548 L0 530 L48 552 L116 527 L182 559 L244 541 L320 571 L381 553 L467 583 L541 551 L629 582 L701 549 L776 570 L862 533 L920 567 L1012 519 L1094 551 L1179 483 L1251 519 L1330 457 L1423 513 L1545 425 L1545 786 L-70 786Z" fill="url(#alpine-back)" opacity=".75" filter="url(#alpine-soft)"/>
+          <path d="M-30 625 C90 596 175 648 260 618 C374 572 453 675 546 605 C627 556 680 614 745 614 C807 585 878 626 928 581 C986 549 1047 568 1084 537 C1140 487 1204 510 1283 437 C1339 402 1424 483 1548 380 L1548 786 L-30 786Z" fill="url(#alpine-middle)" opacity=".64" filter="url(#alpine-soft)"/>
+          <path d="M-30 688 C133 644 204 711 349 661 C427 626 505 702 585 655 C666 612 708 670 779 633 C854 598 923 633 973 578 C1048 512 1090 573 1156 514 C1239 454 1303 502 1360 448 C1442 372 1486 450 1549 385 L1549 786 L-30 786Z" fill="url(#alpine-front)" opacity=".46" filter="url(#alpine-soft)"/>
+          <rect x="0" y="590" width="1536" height="196" fill="url(#alpine-fog)"/>
+        </svg>
+        <svg className="roadmap-path" viewBox="0 0 1536 786" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M-20 705 C130 713 168 718 226 707 S450 691 572 682 S790 629 904 643 S1050 616 1120 566 S1190 526 1253 516 S1410 480 1556 426" fill="none" stroke="white" strokeWidth="12" strokeLinecap="round"/>
+        </svg>
+        <div className="roadmap-items">
+          {milestones.map((m,i)=><article className={'milestone milestone-'+(i+1)} key={m.num}>
+            <div className="milestone-head">
+              <span className={'milestone-count milestone-count-'+m.accent}>{m.num}</span>
+              <div><h3>{m.lines.map((line,index)=><React.Fragment key={line}>{index>0&&<br/>}{line}</React.Fragment>)}</h3><p>{m.sub}</p></div>
+            </div>
+            <div className="milestone-media">
+              <img src={A+m.img} alt="" loading="lazy"/>
+              <div className="milestone-tags">{m.tags.map(t=><span key={t}>{t}</span>)}</div>
+            </div>
+            <div className={'milestone-dot milestone-dot-'+m.accent}/>
+            <div className={'milestone-year milestone-year-'+m.accent}>{m.year}</div>
+          </article>)}
+        </div>
+      </div>
+      <div className="roadmap-benefits">
+        {[
+          ['bars','Skill Growth','From fundamental knowledge to advanced systems.'],
+          ['gear','Real-world Projects','From ideas to working prototypes and deployments.'],
+          ['people','Long-term Impact','Contribute to research, open source, and real-world applications.']
+        ].map(([icon,title,desc])=><div className="benefit" key={title}>
+          <span className="round-icon"><Icon name={icon} size={31}/></span>
+          <div><h3>{title}</h3><p>{desc}</p></div>
+        </div>)}
+      </div>
+    </div>
+  </section>;
+}
 function Join(){const [form,setForm]=useState({name:'',year:'',phone:'',email:''});const [submitted,setSubmitted]=useState(false);const change=(field,value)=>{setForm(o=>({...o,[field]:value}));setSubmitted(false);};const thisYear=new Date().getFullYear();return <section id="join" className="section join-section"><div className="container join-grid"><div className="join-intro"><div className="kicker">JOIN US <span className="kicker-line"/></div><h2>Be Part of<br/><span className="text-blue">Our Team</span></h2><p>Fill in the form to express your interest in joining our lab.</p><img src={A+'join-hardware.webp'} alt="Electronics prototyping equipment on a lab desk" loading="lazy"/></div>
  <form className="join-form" onSubmit={e=>{e.preventDefault();setSubmitted(true);}}><div className="form-title"><span className="round-icon"><Icon name="user" size={31}/></span><div><h3>Application Form</h3><p>Let us know a bit about you.</p></div></div>
   <label>Họ và tên<div className="input-wrap"><Icon name="user"/><input required autoComplete="name" placeholder="Nhập họ và tên của bạn" value={form.name} onChange={e=>change('name',e.target.value)}/></div></label>
@@ -163,4 +243,4 @@ function Join(){const [form,setForm]=useState({name:'',year:'',phone:'',email:''
   {submitted && <div role="status" className="form-notice">Đây là bản demo giao diện. Chưa có dữ liệu nào được gửi hoặc lưu. Cần kết nối API để nhận đăng ký.</div>}
  </form></div></section>}
 function Footer(){return <footer className="footer"><div className="container footer-inner"><Logo/><span>Learn · Build · Deploy</span><a href="#home">Back to top ↑</a></div></footer>}
-export default function App(){return <><Header/><main><Hero/><About/><Learning/><Projects/><Roadmap/><Join/></main><Footer/></>}
+export default function App(){return <><Header/><main><Hero/><AboutPreview/><About/><Learning/><Projects/><Roadmap/><Join/></main><Footer/></>}
