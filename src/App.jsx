@@ -32,14 +32,14 @@ function Icon({name, size=24, stroke=1.8, className=''}) {
   return <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={stroke} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name] || paths.arrow}</svg>;
 }
 function Logo() {
-  return <a href="#home" className="brand" aria-label="Lab for Autonomous Machines and IoT — Home">
+  return <a href="#home" className="brand" aria-label="Lab for Autonomous Machines and IoT — Trang chủ">
     {/* Two replaceable vector assets, switched by the header theme in CSS. */}
     <img className="brand-mark brand-mark-light" src="/assets/logo-light.svg" alt="" width="45" height="45" />
     <img className="brand-mark brand-mark-dark" src="/assets/logo-dark.svg" alt="" width="45" height="45" />
     <span>Lab for Autonomous<br/>Machines &amp; IoT</span>
   </a>;
 }
-const navigation = [['Home','home'],['About','about'],['Learning','learning'],['Projects','projects'],['Roadmap','roadmap']];
+const navigation = [['Trang chủ','home'],['Giới thiệu','about'],['Học tập','learning'],['Dự án','projects'],['Lộ trình','roadmap']];
 function Header() {
   const [active, setActive] = useState('home');
   const [open, setOpen] = useState(false);
@@ -68,24 +68,24 @@ function Header() {
   }, []);
   return <header className="site-header"><div className="container header-inner">
     <Logo />
-    <button className="mobile-menu" type="button" onClick={()=>setOpen(!open)} aria-label="Toggle menu" aria-controls="primary-navigation" aria-expanded={open}>☰</button>
-    <nav id="primary-navigation" className={'nav '+(open?'nav-open':'')} aria-label="Main navigation">
+    <button className="mobile-menu" type="button" onClick={()=>setOpen(!open)} aria-label="Mở hoặc đóng menu" aria-controls="primary-navigation" aria-expanded={open}>☰</button>
+    <nav id="primary-navigation" className={'nav '+(open?'nav-open':'')} aria-label="Điều hướng chính">
       {navigation.map(([label,id])=><a key={id} className={active===id?'active':''} href={'#'+id} onClick={()=>{setActive(id);setOpen(false)}}>{label}</a>)}
-      <a href="#join" className="mobile-nav-join" onClick={()=>setOpen(false)}>Join Us</a>
+      <a href="#join" className="mobile-nav-join" onClick={()=>setOpen(false)}>Tham gia</a>
     </nav>
-    <a href="#join" className="btn btn-primary header-cta" onClick={()=>{setActive('join');setOpen(false)}}>Join Us <Icon name="arrow" size={18}/></a>
+    <a href="#join" className="btn btn-primary header-cta" onClick={()=>{setActive('join');setOpen(false)}}>Tham gia <Icon name="arrow" size={18}/></a>
   </div></header>;
 }
 function Cta({href,children,secondary=false}){return <a href={href} className={'btn '+(secondary?'btn-outline':'btn-primary')}>{children} <Icon name="arrow" size={18}/></a>}
-const focus=[['chip','Embedded Systems'],['cloud','IoT Backend'],['phone','Mobile Applications'],['bars','AI & Smart Maintenance']];
+const focus=[['chip','Hệ thống nhúng'],['cloud','Máy chủ IoT'],['phone','Ứng dụng di động'],['bars','AI & Bảo trì thông minh']];
 function Hero(){return <section id="home" className="hero">
-  <div className="hero-bg" style={{backgroundImage:`url(${heroReference})`}} role="img" aria-label="Industrial motor and IoT monitoring devices"/>
+  <div className="hero-bg" style={{backgroundImage:`url(${heroReference})`}} role="img" aria-label="Động cơ công nghiệp kết nối thiết bị IoT và bảng theo dõi trạng thái"/>
   <div className="container hero-content">
     <div className="hero-copy">
-      <div className="kicker light">LEARN · BUILD · DEPLOY</div>
+      <div className="kicker light">HỌC · XÂY DỰNG · TRIỂN KHAI</div>
       <h1>Lab for Autonomous<br/>Machines <span className="text-blue">&amp; IoT</span></h1>
-      <p>From embedded systems to intelligent maintenance.</p>
-      <div className="button-row"><Cta href="#projects">Explore Our Work</Cta><a className="btn btn-dark-outline" href="#join">Join Us</a></div>
+      <p>Từ hệ thống nhúng đến bảo trì thông minh.</p>
+      <div className="button-row"><Cta href="#projects">Khám phá dự án</Cta><a className="btn btn-dark-outline" href="#join">Tham gia</a></div>
     </div>
     <div className="hero-focus">{focus.map(([icon,label])=><div className="focus-item" key={label}><span className="focus-icon"><Icon name={icon} size={28}/></span><span>{label}</span></div>)}</div>
   </div>
@@ -93,85 +93,85 @@ function Hero(){return <section id="home" className="hero">
 </section>}
 
 function AboutPreview(){return <section className="about-preview"><div className="container about-preview-grid">
-  <div className="about-preview-copy"><div className="kicker">ABOUT US <span className="kicker-line"/></div>
-    <h2>Turning Real-World Problems<br/>into Practical Solutions</h2>
-    <p>We are a group of engineers and students passionate about building autonomous machines and IoT systems for a smarter, safer and more efficient industry.</p>
-    <a href="#about" className="preview-learn">Learn More <Icon name="arrow" size={18}/></a>
+  <div className="about-preview-copy"><div className="kicker">VỀ CHÚNG TÔI <span className="kicker-line"/></div>
+    <h2>Giải quyết bài toán thực tế<br/>bằng công nghệ ứng dụng</h2>
+    <p>Chúng tôi là nhóm sinh viên và kỹ sư cùng nghiên cứu, xây dựng hệ thống máy tự động và IoT hướng tới công nghiệp thông minh.</p>
+    <a href="#about" className="preview-learn">Tìm hiểu thêm <Icon name="arrow" size={18}/></a>
   </div>
-  <div className="about-preview-photo" role="img" aria-label="Hands-on electronic prototyping in the engineering lab" style={{backgroundImage:`url(${heroReference})`}}/>
+  <div className="about-preview-photo" role="img" aria-label="Thực hành chế tạo mạch điện tử tại phòng nghiên cứu" style={{backgroundImage:`url(${heroReference})`}}/>
   <div className="about-preview-stats">
-    <div className="preview-stat"><span className="preview-stat-icon"><Icon name="people" size={29}/></span><div><strong>10+</strong><span>Team Members</span></div></div>
-    <div className="preview-stat"><span className="preview-stat-icon"><Icon name="book" size={29}/></span><div><strong>4</strong><span>Key Focus Areas</span></div></div>
-    <div className="preview-stat"><span className="preview-stat-icon"><Icon name="target" size={29}/></span><div><strong>1</strong><span>Shared Goal<br/><b>Smarter Industry</b></span></div></div>
+    <div className="preview-stat"><span className="preview-stat-icon"><Icon name="people" size={29}/></span><div><strong>10+</strong><span>Thành viên</span></div></div>
+    <div className="preview-stat"><span className="preview-stat-icon"><Icon name="book" size={29}/></span><div><strong>4</strong><span>Lĩnh vực trọng tâm</span></div></div>
+    <div className="preview-stat"><span className="preview-stat-icon"><Icon name="target" size={29}/></span><div><strong>1</strong><span>Mục tiêu chung<br/><b>Công nghiệp thông minh</b></span></div></div>
   </div>
 </div></section>}
 const aboutCards=[
-  {title:'People',text:'A collaborative team of passionate learners and engineers.',icon:'people',image:'about-people.webp'},
-  {title:'Purpose',text:'Connecting engineering knowledge with practical industrial applications.',icon:'bulb',image:'about-purpose.webp'},
-  {title:'Long-term Vision',text:'Towards intelligent and autonomous machines.',icon:'target',image:'about-vision.webp'}
+  {title:'Con người',text:'Nhóm sinh viên và kỹ sư cùng học hỏi, hợp tác nghiên cứu.',icon:'people',image:'about-people.webp'},
+  {title:'Sứ mệnh',text:'Kết nối kiến thức kỹ thuật với các ứng dụng công nghiệp thực tế.',icon:'bulb',image:'about-purpose.webp'},
+  {title:'Tầm nhìn',text:'Hướng tới máy móc tự động và hệ thống công nghiệp thông minh.',icon:'target',image:'about-vision.webp'}
 ];
 function About(){return <section id="about" className="section about-section"><div className="container">
   <div className="section-split about-top">
-    <div className="intro-copy"><div className="kicker">ABOUT US <span className="kicker-line"/></div>
-      <h2>A Team Passionate<br/>about{' '}<span className="text-blue">Real-World<br/>Impact</span></h2>
-      <p>We are a group of engineers and students who believe hands-on learning and collaborative research can turn complex engineering challenges into practical solutions for a smarter, safer and more efficient industry.</p>
-      <div className="button-row"><Cta href="#about-values">Our Story</Cta><a href="#learning" className="video-link"><span><Icon name="play" size={18}/></span> Explore Learning</a></div>
+    <div className="intro-copy"><div className="kicker">VỀ CHÚNG TÔI <span className="kicker-line"/></div>
+      <h2>Đam mê kỹ thuật<br/>Tạo <span className="text-blue">giá trị thực tiễn</span></h2>
+      <p>Chúng tôi tin rằng học qua thực hành và nghiên cứu cùng nhau có thể biến những bài toán kỹ thuật phức tạp thành giải pháp hữu ích, giúp sản xuất an toàn và hiệu quả hơn.</p>
+      <div className="button-row"><Cta href="#about-values">Câu chuyện của nhóm</Cta><a href="#learning" className="video-link"><span><Icon name="play" size={18}/></span> Khám phá lộ trình học</a></div>
     </div>
-    <div className="about-photo"><img src={A+'about-team.webp'} alt="Engineering students working on electronics in a laboratory" loading="lazy"/></div>
+    <div className="about-photo"><img src={A+'about-team.webp'} alt="Sinh viên và kỹ sư nghiên cứu thiết bị điện tử trong phòng lab" loading="lazy"/><div className="glass-quote"><i/>Từ ý tưởng<br/>đến hệ thống thực tế</div></div>
   </div>
-  <div className="about-cards" id="about-values">{aboutCards.map(c=><article className="about-card" key={c.title}><img src={A+c.image} alt="" className="card-decoration" loading="lazy"/><div className="round-icon"><Icon name={c.icon} size={29}/></div><h3>{c.title}</h3><p>{c.text}</p><a href="#learning" aria-label={'Explore '+c.title} className="circle-link"><Icon name="arrow" size={20}/></a></article>)}</div>
+  <div className="about-cards" id="about-values">{aboutCards.map(c=><article className="about-card" key={c.title}><img src={A+c.image} alt="" className="card-decoration" loading="lazy"/><div className="round-icon"><Icon name={c.icon} size={29}/></div><h3>{c.title}</h3><p>{c.text}</p><a href="#learning" aria-label={'Tìm hiểu '+c.title} className="circle-link"><Icon name="arrow" size={20}/></a></article>)}</div>
 </div></section>}
 const learningCards=[
-  {num:'01',icon:'chip',title:'Embedded Systems',tag:'Hardware foundation.',points:['MCU & RTOS','Sensors & Control'],image:'embedded.webp',theme:'blue'},
-  {num:'02',icon:'cloud',title:'IoT & Backend',tag:'Connect devices and data.',points:['MQTT & APIs','Cloud & Databases'],image:'backend.webp',theme:'sand'},
-  {num:'03',icon:'phone',title:'Mobile & Web Apps',tag:'Build monitoring tools.',points:['Flutter / React','UI for dashboards'],image:'mobile.webp',theme:'mint'},
-  {num:'04',icon:'brain',title:'AI & Smart Maintenance',tag:'Turn data into insight.',points:['Predictive analytics','Fault detection'],image:'ai.webp',theme:'lilac'}
+  {num:'01',icon:'chip',title:'Hệ thống nhúng',tag:'Nền tảng phần cứng.',points:['Vi điều khiển & RTOS','Cảm biến & điều khiển'],image:'embedded.webp',theme:'blue'},
+  {num:'02',icon:'cloud',title:'IoT & Backend',tag:'Kết nối thiết bị và dữ liệu.',points:['MQTT & API','Máy chủ & cơ sở dữ liệu'],image:'backend.webp',theme:'sand'},
+  {num:'03',icon:'phone',title:'Ứng dụng Web & Mobile',tag:'Giám sát hệ thống từ xa.',points:['Flutter / React','Giao diện giám sát'],image:'mobile.webp',theme:'mint'},
+  {num:'04',icon:'brain',title:'AI & Bảo trì thông minh',tag:'Biến dữ liệu thành tri thức.',points:['Phân tích dự đoán','Phát hiện sự cố'],image:'ai.webp',theme:'lilac'}
 ];
-const journey=[['chip','Fundamentals','Core knowledge'],['wrench','Practice','Labs & mini-projects'],['box','Projects','Build real systems'],['bars','Grow','Collaborate & share']];
+const journey=[['chip','Nền tảng','Kiến thức cốt lõi'],['wrench','Thực hành','Bài lab & dự án nhỏ'],['box','Dự án','Phát triển hệ thống'],['bars','Phát triển','Hợp tác & chia sẻ']];
 function Learning(){return <section id="learning" className="section learning-section"><div className="container">
-  <div className="section-split learning-top"><div className="intro-copy"><div className="kicker">LEARNING PATHS <span className="kicker-line"/></div>
-    <h2>Structured Paths<br/>to Build <span className="text-blue">Real Skills.</span></h2>
-    <p>Choose a path, build fundamentals, practice through projects, and grow into real-world systems.</p>
-    <div className="button-row"><Cta href="#learning-grid">Explore Paths</Cta><a className="video-link" href="#journey"><span><Icon name="play" size={18}/></span> View Journey</a></div>
-  </div><div className="learning-art"><img src={A+'learning-system.webp'} alt="Hardware connected to a software development laptop and mobile monitoring dashboard" loading="lazy"/></div></div>
+  <div className="section-split learning-top"><div className="intro-copy"><div className="kicker">LỘ TRÌNH HỌC TẬP <span className="kicker-line"/></div>
+    <h2>Học bài bản<br/>Rèn <span className="text-blue">kỹ năng thực tế.</span></h2>
+    <p>Từ kiến thức nền tảng đến thực hành, phát triển dự án và triển khai hệ thống thực tế.</p>
+    <div className="button-row"><Cta href="#learning-grid">Khám phá lộ trình</Cta><a className="video-link" href="#journey"><span><Icon name="play" size={18}/></span> Xem hành trình học</a></div>
+  </div><div className="learning-art"><img src={A+'learning-system.webp'} alt="Vi điều khiển kết nối máy tính phát triển phần mềm và ứng dụng giám sát" loading="lazy"/></div></div>
   <div className="learning-grid" id="learning-grid">{learningCards.map(c=><article className={'learning-card '+c.theme} key={c.num}>
-    <div className="learning-card-head"><span className="number-icon">{c.num}</span><span className="round-icon"><Icon name={c.icon} size={31}/></span><a href="#join" aria-label={'Learn more about '+c.title} className="small-chevron"><Icon name="chevron" size={23}/></a></div>
+    <div className="learning-card-head"><span className="number-icon">{c.num}</span><span className="round-icon"><Icon name={c.icon} size={31}/></span><a href="#join" aria-label={'Tìm hiểu '+c.title} className="small-chevron"><Icon name="chevron" size={23}/></a></div>
     <h3>{c.title}</h3><p>{c.tag}</p><ul>{c.points.map(pt=><li key={pt}>{pt}</li>)}</ul><img className="learning-photo" src={A+c.image} alt="" loading="lazy"/>
   </article>)}</div>
-  <div className="journey" id="journey"><div className="journey-label"><h3>Learning Journey</h3><p>A simple path from basics<br/>to real projects.</p></div>
+  <div className="journey" id="journey"><div className="journey-label"><h3>Hành trình học tập</h3><p>Từ kiến thức cơ bản<br/>đến dự án thực tế.</p></div>
     <div className="journey-steps">{journey.map(([icon,title,sub],i)=><div className="journey-step" key={title}><span className="step-number">{i+1}</span><Icon name={icon} size={29}/><div><strong>{title}</strong><small>{sub}</small></div></div>)}</div>
   </div>
 </div></section>}
 const projectCards=[
- {title:'Autonomous Robot Platform',text:'A modular platform for research and experimentation.',tags:['Embedded','Robotics'],type:'Systems',img:'project-robot.webp',icon:'chip'},
- {title:'LoRa P2P Sensor Network',text:'Long-range, low-power communication for remote sensing.',tags:['IoT','Wireless'],type:'IoT',img:'project-lora.webp',icon:'cloud'},
- {title:'Predictive Maintenance',text:'Turning sensor data into useful insights.',tags:['AI/ML','Analytics'],type:'AI & Software',img:'project-ai.webp',icon:'bars'},
- {title:'Research Prototypes',text:'Exploring new ideas and validating concepts.',tags:['Research','Prototyping'],type:'Research',img:'project-prototype.webp',icon:'flask'}
+ {title:'Nền tảng robot tự hành',text:'Hệ thống robot mô-đun phục vụ học tập và nghiên cứu.',tags:['Nhúng','Robot'],type:'Hệ thống',img:'project-robot.webp',icon:'chip'},
+ {title:'Mạng cảm biến LoRa P2P',text:'Truyền dữ liệu cảm biến tầm xa với công suất thấp.',tags:['IoT','Không dây'],type:'IoT',img:'project-lora.webp',icon:'cloud'},
+ {title:'Bảo trì dự đoán',text:'Phân tích dữ liệu thiết bị để hỗ trợ chẩn đoán sự cố.',tags:['AI/ML','Phân tích dữ liệu'],type:'AI & Phần mềm',img:'project-ai.webp',icon:'bars'},
+ {title:'Nguyên mẫu nghiên cứu',text:'Thử nghiệm ý tưởng và kiểm chứng giải pháp kỹ thuật.',tags:['Nghiên cứu','Nguyên mẫu'],type:'Nghiên cứu',img:'project-prototype.webp',icon:'flask'}
 ];
-const filters=['All','Embedded','IoT','AI & Software','Systems','Research'];
-function Projects(){const [filter,setFilter]=useState('All'); const cards=useMemo(()=>projectCards.filter(c=>filter==='All'||c.type===filter||c.tags.includes(filter)),[filter]);return <section id="projects" className="section projects-section"><div className="container">
- <div className="section-split projects-top"><div className="intro-copy"><div className="kicker">PROJECTS <span className="kicker-line"/></div>
-  <h2>From Ideas<br/>to <span className="text-blue">Real Systems.</span></h2>
-  <p>Selected projects that turn research and learning into practical, real-world solutions.</p>
-  <div className="button-row"><Cta href="#projects-list">Explore All Projects</Cta></div>
- </div><div className="featured-project"><img src={A+'project-feature.webp'} alt="Industrial IoT sensor gateway hardware" loading="lazy"/><div className="featured-shade"/><div className="featured-content"><div className="kicker light">FEATURED PROJECT</div><h3>Industrial IoT<br/>Monitoring</h3><p>Industrial sensor networks<br/>and device monitoring.</p><div className="featured-tags"><span><Icon name="thermometer" size={20}/> Sensors</span><span><Icon name="cloud" size={20}/> IoT</span><span><Icon name="bars" size={20}/> Dashboard</span></div></div></div></div>
- <div className="project-filters" id="projects-list" role="group" aria-label="Filter projects">{filters.map(f=><button type="button" key={f} aria-pressed={filter===f} className={filter===f?'selected':''} onClick={()=>setFilter(f)}>{f}</button>)}</div>
- <div className="project-grid">{cards.map(c=><article key={c.title} className="project-card"><div className="project-image"><img src={A+c.img} alt="" loading="lazy"/><span className="project-type-icon"><Icon name={c.icon} size={28}/></span></div><div className="project-description"><h3>{c.title}</h3><p>{c.text}</p><div className="project-foot"><div className="tags">{c.tags.map(t=><span key={t}>{t}</span>)}</div><a href="#join" className="circle-link" aria-label={'Discuss '+c.title}><Icon name="arrow" size={18}/></a></div></div></article>)}</div>
- <div className="collab-banner"><span className="collab-icon"><Icon name="bulb" size={32}/></span><div><h3>Have an idea?</h3><p>We are open to collaboration and real-world challenges.</p></div><Cta href="#join">Work With Us</Cta></div>
+const filters=['Tất cả','Nhúng','IoT','AI & Phần mềm','Hệ thống','Nghiên cứu'];
+function Projects(){const [filter,setFilter]=useState('Tất cả'); const cards=useMemo(()=>projectCards.filter(c=>filter==='Tất cả'||c.type===filter||c.tags.includes(filter)),[filter]);return <section id="projects" className="section projects-section"><div className="container">
+ <div className="section-split projects-top"><div className="intro-copy"><div className="kicker">DỰ ÁN <span className="kicker-line"/></div>
+  <h2>Từ ý tưởng<br/>đến <span className="text-blue">hệ thống thật.</span></h2>
+  <p>Những dự án kết nối kiến thức, nghiên cứu và ứng dụng thực tiễn.</p>
+  <div className="button-row"><Cta href="#projects-list">Khám phá dự án</Cta></div>
+ </div><div className="featured-project"><img src={A+'project-feature.webp'} alt="Thiết bị thu thập dữ liệu cảm biến IoT công nghiệp" loading="lazy"/><div className="featured-shade"/><div className="featured-content"><div className="kicker light">DỰ ÁN NỔI BẬT</div><h3>Giám sát thiết bị<br/>IoT công nghiệp</h3><p>Kết nối cảm biến, thu thập<br/>và theo dõi dữ liệu thiết bị.</p><div className="featured-tags"><span><Icon name="thermometer" size={20}/> Cảm biến</span><span><Icon name="cloud" size={20}/> IoT</span><span><Icon name="bars" size={20}/> Giám sát</span></div></div></div></div>
+ <div className="project-filters" id="projects-list" role="group" aria-label="Lọc dự án">{filters.map(f=><button type="button" key={f} aria-pressed={filter===f} className={filter===f?'selected':''} onClick={()=>setFilter(f)}>{f}</button>)}</div>
+ <div className="project-grid">{cards.map(c=><article key={c.title} className="project-card"><div className="project-image"><img src={A+c.img} alt="" loading="lazy"/><span className="project-type-icon"><Icon name={c.icon} size={28}/></span></div><div className="project-description"><h3>{c.title}</h3><p>{c.text}</p><div className="project-foot"><div className="tags">{c.tags.map(t=><span key={t}>{t}</span>)}</div><a href="#join" className="circle-link" aria-label={'Trao đổi về '+c.title}><Icon name="arrow" size={18}/></a></div></div></article>)}</div>
+ <div className="collab-banner"><span className="collab-icon"><Icon name="bulb" size={32}/></span><div><h3>Bạn có ý tưởng?</h3><p>Cùng hợp tác giải quyết những bài toán kỹ thuật thực tế.</p></div><Cta href="#join">Hợp tác cùng nhóm</Cta></div>
  </div></section>}
 const milestones = [
-  {num:'01',name:'Learn & Build Foundations',lines:['Learn & Build','Foundations'],sub:'Core skills and hands-on mini projects.',year:'2025 – 2026',tags:['Embedded','IoT Basics'],img:'roadmap-one.webp',accent:'blue'},
-  {num:'02',name:'Develop Real Systems',lines:['Develop Real','Systems'],sub:'Build and integrate working prototypes.',year:'2026 – 2027',tags:['Robotics','LoRa / Wireless'],img:'roadmap-two.webp',accent:'mint'},
-  {num:'03',name:'Scale & Apply',lines:['Scale & Apply'],sub:'Deploy in real environments and solve practical problems.',year:'2027 – 2028',tags:['Real-world Deployment','Data & AI'],img:'roadmap-three.webp',accent:'gold'},
-  {num:'04',name:'Create Lasting Impact',lines:['Create Lasting','Impact'],sub:'Open solutions, collaboration, and broader applications.',year:'2028+',tags:['Open Source','Industry & Society'],img:'roadmap-four.webp',accent:'purple'}
+  {num:'01',name:'Xây dựng nền tảng',lines:['Xây dựng','nền tảng'],sub:'Kiến thức cốt lõi và thực hành với dự án nhỏ.',year:'2025 – 2026',tags:['Hệ thống nhúng','IoT cơ bản'],img:'roadmap-one.webp',accent:'blue'},
+  {num:'02',name:'Phát triển hệ thống',lines:['Phát triển','hệ thống'],sub:'Thiết kế, tích hợp và thử nghiệm nguyên mẫu.',year:'2026 – 2027',tags:['Robot','LoRa / Không dây'],img:'roadmap-two.webp',accent:'mint'},
+  {num:'03',name:'Triển khai thực tế',lines:['Triển khai','thực tế'],sub:'Đưa giải pháp vào môi trường ứng dụng.',year:'2027 – 2028',tags:['Triển khai thực tế','Dữ liệu & AI'],img:'roadmap-three.webp',accent:'gold'},
+  {num:'04',name:'Tạo tác động lâu dài',lines:['Tạo tác động','lâu dài'],sub:'Mở rộng ứng dụng, hợp tác và chia sẻ.',year:'2028+',tags:['Mã nguồn mở','Công nghiệp & Xã hội'],img:'roadmap-four.webp',accent:'purple'}
 ];
 function Roadmap(){
   return <section id="roadmap" className="section roadmap-section">
     <div className="container roadmap-layout">
       <div className="roadmap-top">
-        <div className="kicker">ROADMAP <span className="kicker-line"/></div>
-        <h2>From Learning<br/>to <span className="text-blue">Real Impact</span></h2>
-        <p>A step-by-step journey to build skills, develop real systems, and create lasting impact.</p>
+        <div className="kicker">LỘ TRÌNH PHÁT TRIỂN <span className="kicker-line"/></div>
+        <h2>Từ học tập<br/>đến <span className="text-blue">giá trị thực tiễn</span></h2>
+        <p>Từng bước phát triển kỹ năng, xây dựng hệ thống và tạo ra giá trị lâu dài.</p>
       </div>
       <div className="roadmap-scene">
         <div className="roadmap-background" aria-hidden="true"/>
@@ -211,9 +211,9 @@ function Roadmap(){
       </div>
       <div className="roadmap-benefits">
         {[
-          ['bars','Skill Growth','From fundamental knowledge to advanced systems.'],
-          ['gear','Real-world Projects','From ideas to working prototypes and deployments.'],
-          ['people','Long-term Impact','Contribute to research, open source, and real-world applications.']
+          ['bars','Phát triển kỹ năng','Từ kiến thức cơ bản đến công nghệ chuyên sâu.'],
+          ['gear','Dự án thực tế','Từ ý tưởng đến nguyên mẫu và hệ thống ứng dụng.'],
+          ['people','Giá trị lâu dài','Đóng góp cho nghiên cứu và các ứng dụng thực tiễn.']
         ].map(([icon,title,desc])=><div className="benefit" key={title}>
           <span className="round-icon"><Icon name={icon} size={31}/></span>
           <div><h3>{title}</h3><p>{desc}</p></div>
@@ -222,8 +222,8 @@ function Roadmap(){
     </div>
   </section>;
 }
-function Join(){const [form,setForm]=useState({name:'',year:'',phone:'',email:''});const [submitted,setSubmitted]=useState(false);const change=(field,value)=>{setForm(o=>({...o,[field]:value}));setSubmitted(false);};const thisYear=new Date().getFullYear();return <section id="join" className="section join-section"><div className="container join-grid"><div className="join-intro"><div className="kicker">JOIN US <span className="kicker-line"/></div><h2>Be Part of<br/><span className="text-blue">Our Team</span></h2><p>Fill in the form to express your interest in joining our lab.</p><img src={A+'join-hardware.webp'} alt="Electronics prototyping equipment on a lab desk" loading="lazy"/></div>
- <form className="join-form" onSubmit={e=>{e.preventDefault();setSubmitted(true);}}><div className="form-title"><span className="round-icon"><Icon name="user" size={31}/></span><div><h3>Application Form</h3><p>Let us know a bit about you.</p></div></div>
+function Join(){const [form,setForm]=useState({name:'',year:'',phone:'',email:''});const [submitted,setSubmitted]=useState(false);const change=(field,value)=>{setForm(o=>({...o,[field]:value}));setSubmitted(false);};const thisYear=new Date().getFullYear();return <section id="join" className="section join-section"><div className="container join-grid"><div className="join-intro"><div className="kicker">THAM GIA CÙNG CHÚNG TÔI <span className="kicker-line"/></div><h2>Gia nhập<br/><span className="text-blue">nhóm của chúng tôi</span></h2><p>Điền thông tin để đăng ký tìm hiểu và tham gia hoạt động của nhóm.</p><img src={A+'join-hardware.webp'} alt="Thiết bị điện tử thử nghiệm trên bàn làm việc tại phòng lab" loading="lazy"/></div>
+ <form className="join-form" onSubmit={e=>{e.preventDefault();setSubmitted(true);}}><div className="form-title"><span className="round-icon"><Icon name="user" size={31}/></span><div><h3>Thông tin đăng ký</h3><p>Chia sẻ một vài thông tin để chúng tôi liên hệ.</p></div></div>
   <label>Họ và tên<div className="input-wrap"><Icon name="user"/><input required autoComplete="name" placeholder="Nhập họ và tên của bạn" value={form.name} onChange={e=>change('name',e.target.value)}/></div></label>
   <label>Năm nhập học<div className="input-wrap"><Icon name="calendar"/><select required value={form.year} onChange={e=>change('year',e.target.value)}><option value="">Chọn năm nhập học</option>{Array.from({length:9},(_,i)=>thisYear+1-i).map(y=><option value={y} key={y}>{y}</option>)}</select></div></label>
   <label>Số điện thoại<div className="input-wrap"><Icon name="phone"/><input required inputMode="tel" type="tel" pattern="[+0-9() .-]{9,20}" autoComplete="tel" placeholder="Nhập số điện thoại" value={form.phone} onChange={e=>change('phone',e.target.value)}/></div></label>
@@ -231,5 +231,5 @@ function Join(){const [form,setForm]=useState({name:'',year:'',phone:'',email:''
   <button className="btn btn-primary submit-btn" type="submit">Gửi đăng ký <Icon name="arrow" size={21}/></button>
   {submitted && <div role="status" className="form-notice">Đây là bản demo giao diện. Chưa có dữ liệu nào được gửi hoặc lưu. Cần kết nối API để nhận đăng ký.</div>}
  </form></div></section>}
-function Footer(){return <footer className="footer"><div className="container footer-inner"><Logo/><span>Learn · Build · Deploy</span><a href="#home">Back to top ↑</a></div></footer>}
+function Footer(){return <footer className="footer"><div className="container footer-inner"><Logo/><span>Học · Xây dựng · Triển khai</span><a href="#home">Lên đầu trang ↑</a></div></footer>}
 export default function App(){return <><Header/><main><Hero/><AboutPreview/><About/><Learning/><Projects/><Roadmap/><Join/></main><Footer/></>}

@@ -175,6 +175,20 @@ def main():
         page=browser.new_page(viewport={"width":1366,"height":900})
         try:
             ready(page,args.url)
+            # Confirm visible interface and document metadata are Vietnamese.
+            locale=page.evaluate("""() => ({
+                lang:document.documentElement.lang,
+                labels:[...document.querySelectorAll('#primary-navigation>a')].map(e=>e.textContent.trim()),
+                hasVietnameseHero:document.querySelector('#home p')?.textContent.includes('hệ thống nhúng'),
+                hasVietnameseRoadmap:document.querySelector('#roadmap h2')?.textContent.includes('học tập'),
+                hasVietnameseForm:document.querySelector('.join-form .form-title h3')?.textContent.includes('Thông tin đăng ký')
+            })""")
+            locale_ok=(locale["lang"]=="vi" and
+                       all(label in locale["labels"] for label in ["Trang chủ","Giới thiệu","Học tập","Dự án","Lộ trình"]) and
+                       locale["hasVietnameseHero"] and locale["hasVietnameseRoadmap"] and locale["hasVietnameseForm"])
+            report["interactions"]["vietnameseLocale"]=locale_ok
+            if not locale_ok:
+                report["findings"].append(f"Vietnamese interface check failed: {locale}")
             # Branded SVGs must load and switch with the navbar color.
             focus(page, "home")
             light=page.locator(".site-header .brand-mark-light")
@@ -191,7 +205,7 @@ def main():
                 report["findings"].append("Logo theme switching or SVG loading failed")
             page.get_by_role("button",name="IoT",exact=True).click()
             count=page.locator(".project-grid .project-card").count()
-            page.get_by_role("button",name="All",exact=True).click()
+            page.get_by_role("button",name="Tất cả",exact=True).click()
             reset=page.locator(".project-grid .project-card").count()
             report["interactions"]["projectFilters"]=(count==1 and reset==4)
             page.locator('#join input[autocomplete="name"]').fill("QA Test")
@@ -213,7 +227,7 @@ def main():
         lines.append(f'| {name} | {r["pixelMAE"]} | [{name}-overlay.png]({name}-overlay.png) |')
     lines+=["","## Mobile and interaction findings",""]
     lines += [f"- {e}" for e in report["findings"]] or ["- No automated errors found."]
-    lines += ["","Pixel MAE is diagnostic, not a pixel-perfect approval. Manually review screenshots against AI-generated mockups at 100% browser zoom.",""]
+    lines += ["","The reference screenshots are English-language mockups. Pixel MAE will increase with Vietnamese localization and must not be used as an approval threshold. Check spacing, clipping, layout and responsive behavior manually.",""]
     (args.out/"REPORT.md").write_text("\n".join(lines),encoding="utf-8")
     print(f"Report saved to {args.out/'REPORT.md'}; findings={len(report['findings'])}")
     return 1 if report["findings"] else 0
