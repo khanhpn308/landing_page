@@ -261,16 +261,39 @@ function Roadmap(){
 function Join({ selectedTrack, onSelectTrack }) {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({name:'',year:'',phone:'',email:''});
-  const [submitted, setSubmitted] = useState(false);
-  const change = (field,value) => {setForm(old => ({...old,[field]:value}));setSubmitted(false);};
+  const [submitStatus, setSubmitStatus] = useState('idle');
+  const [botField, setBotField] = useState('');
+  const change = (field,value) => {setForm(old => ({...old,[field]:value}));setSubmitStatus('idle');};
   const thisYear = new Date().getFullYear();
   const track = specializations.find(item => item.id === selectedTrack);
-  const goNext = () => {if (track) {setStep(2);setSubmitted(false);}};
-  const submit = (event) => {
+  const goNext = () => {if (track) {setStep(2);setSubmitStatus('idle');}};
+  const submit = async (event) => {
     event.preventDefault();
-    if (step !== 2 || !track) {setStep(1);return;}
-    // The current landing page has no submission API; never imply the form has been delivered.
-    setSubmitted(true);
+    if (step !== 2 || !track || submitStatus === 'sending' || submitStatus === 'success') {
+      if (step !== 2 || !track) setStep(1);
+      return;
+    }
+    setSubmitStatus('sending');
+    try {
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          'form-name': 'join-us',
+          'bot-field': botField,
+          specialization: track.name,
+          name: form.name.trim(),
+          year: form.year,
+          phone: form.phone.trim(),
+          email: form.email.trim()
+        }).toString()
+      });
+      if (!response.ok) throw new Error('HTTP ' + response.status);
+      setSubmitStatus('success');
+    } catch (error) {
+      console.error('Netlify Forms submission failed:', error);
+      setSubmitStatus('error');
+    }
   };
   return <section id="join" className="section join-section">
     <div className="container join-grid">
@@ -280,7 +303,11 @@ function Join({ selectedTrack, onSelectTrack }) {
         <p>Ứng tuyển vào Lab bắt đầu bằng việc chọn <strong>một lĩnh vực chuyên môn chính</strong>, sau đó cung cấp thông tin liên hệ.</p>
         <img src={A+'join-hardware.webp'} alt="Thiết bị điện tử thử nghiệm trên bàn làm việc tại phòng lab" loading="lazy"/>
       </div>
-      <form className="join-form" onSubmit={submit}>
+      <form className="join-form" name="join-us" method="POST" data-netlify="true" netlify-honeypot="bot-field" onSubmit={submit} aria-busy={submitStatus==='sending'}>
+        <input type="hidden" name="form-name" value="join-us" />
+        <div style={{position:'absolute',left:'-9999px',width:1,height:1,overflow:'hidden'}} aria-hidden="true">
+          <label>Không điền ô này <input name="bot-field" type="text" autoComplete="off" tabIndex={-1} value={botField} onChange={e=>setBotField(e.target.value)}/></label>
+        </div>
         <div className="join-step-header"><span>ĐĂNG KÝ THAM GIA</span><span>Bước {step} / 2</span></div>
         <div className="join-progress" aria-label={'Tiến độ đăng ký: bước '+step+' trên 2'}><span className={step >= 1 ? 'progress-on' : ''}/><span className={step === 2 ? 'progress-on' : ''}/></div>
         {step === 1 ? <>
@@ -288,7 +315,7 @@ function Join({ selectedTrack, onSelectTrack }) {
           <fieldset className="join-track-fieldset">
             <legend className="visually-hidden">Lĩnh vực chuyên môn chính</legend>
             <div className="join-track-grid">{specializations.map(item => <label className={'join-track-option'+(selectedTrack===item.id?' is-selected':'')} key={item.id}>
-              <input type="radio" name="specialization" value={item.id} checked={selectedTrack===item.id} onChange={()=>{onSelectTrack(item.id);setSubmitted(false);}}/>
+              <input type="radio" name="specialization" value={item.id} checked={selectedTrack===item.id} onChange={()=>{onSelectTrack(item.id);setSubmitStatus('idle');}}/>
               <span className="join-track-icon"><Icon name={item.icon} size={24}/></span>
               <span className="join-track-text"><strong>{item.name}</strong><small>{item.scope}</small></span>
               <span className="join-track-indicator" aria-hidden="true"><Icon name="check" size={14}/></span>
@@ -298,16 +325,17 @@ function Join({ selectedTrack, onSelectTrack }) {
           <button className="btn btn-primary submit-btn" type="button" onClick={goNext} disabled={!track}>Tiếp tục điền thông tin <Icon name="arrow" size={20}/></button>
         </> : <>
           <div className="form-title"><span className="round-icon"><Icon name="user" size={28}/></span><div><h3>Thông tin đăng ký</h3><p>Chia sẻ thông tin để nhóm liên hệ với bạn.</p></div></div>
-          <div className="join-selected-track"><span><small>HƯỚNG CHUYÊN MÔN ĐÃ CHỌN</small><strong>{track?.name}</strong></span><button type="button" onClick={()=>{setStep(1);setSubmitted(false);}}>Thay đổi</button></div>
+          <div className="join-selected-track"><span><small>HƯỚNG CHUYÊN MÔN ĐÃ CHỌN</small><strong>{track?.name}</strong></span><button type="button" onClick={()=>{setStep(1);setSubmitStatus('idle');}}>Thay đổi</button></div>
           <input type="hidden" name="specialization" value={selectedTrack}/>
-          <label>Họ và tên<div className="input-wrap"><Icon name="user"/><input required autoComplete="name" placeholder="Nhập họ và tên của bạn" value={form.name} onChange={e=>change('name',e.target.value)}/></div></label>
-          <label>Năm nhập học<div className="input-wrap"><Icon name="calendar"/><select required value={form.year} onChange={e=>change('year',e.target.value)}><option value="">Chọn năm nhập học</option>{Array.from({length:9},(_,i)=>thisYear+1-i).map(y=><option value={y} key={y}>{y}</option>)}</select></div></label>
-          <label>Số điện thoại<div className="input-wrap"><Icon name="phone"/><input required inputMode="tel" type="tel" pattern="[+0-9() .-]{9,20}" autoComplete="tel" placeholder="Nhập số điện thoại" value={form.phone} onChange={e=>change('phone',e.target.value)}/></div></label>
-          <label>Email<div className="input-wrap"><Icon name="email"/><input required type="email" autoComplete="email" placeholder="Nhập email của bạn" value={form.email} onChange={e=>change('email',e.target.value)}/></div></label>
-          <div className="join-form-actions"><button className="join-back" type="button" onClick={()=>{setStep(1);setSubmitted(false);}}>Quay lại</button><button className="btn btn-primary submit-btn" type="submit">Gửi đăng ký <Icon name="arrow" size={20}/></button></div>
-          {submitted && <div role="status" className="form-notice">Đây là bản demo giao diện. Thông tin và hướng chuyên môn của bạn chưa được gửi hoặc lưu. Cần kết nối API để tiếp nhận đăng ký.</div>}
+          <label>Họ và tên<div className="input-wrap"><Icon name="user"/><input name="name" required autoComplete="name" maxLength={120} placeholder="Nhập họ và tên của bạn" value={form.name} onChange={e=>change('name',e.target.value)}/></div></label>
+          <label>Năm nhập học<div className="input-wrap"><Icon name="calendar"/><select name="year" required value={form.year} onChange={e=>change('year',e.target.value)}><option value="">Chọn năm nhập học</option>{Array.from({length:9},(_,i)=>thisYear+1-i).map(y=><option value={y} key={y}>{y}</option>)}</select></div></label>
+          <label>Số điện thoại<div className="input-wrap"><Icon name="phone"/><input name="phone" required inputMode="tel" type="tel" pattern="[+0-9() .-]{9,20}" autoComplete="tel" maxLength={20} placeholder="Nhập số điện thoại" value={form.phone} onChange={e=>change('phone',e.target.value)}/></div></label>
+          <label>Email<div className="input-wrap"><Icon name="email"/><input name="email" required type="email" autoComplete="email" maxLength={254} placeholder="Nhập email của bạn" value={form.email} onChange={e=>change('email',e.target.value)}/></div></label>
+          <div className="join-form-actions"><button className="join-back" type="button" onClick={()=>{setStep(1);setSubmitStatus('idle');}}>Quay lại</button><button className="btn btn-primary submit-btn" type="submit" disabled={submitStatus==='sending'||submitStatus==='success'}>{submitStatus==='sending'?'Đang gửi...':submitStatus==='success'?'Đã gửi đăng ký':'Gửi đăng ký'} <Icon name="arrow" size={20}/></button></div>
+          {submitStatus==='success' && <div role="status" className="form-notice">Đăng ký đã được gửi. Nhóm sẽ liên hệ với bạn qua thông tin đã cung cấp.</div>}
+          {submitStatus==='error' && <div role="alert" className="form-notice" style={{color:'#a12a2a',background:'#fff2f2',borderColor:'#ffd0d0'}}>Không gửi được đăng ký. Vui lòng thử lại sau.</div>}
         </>}
-        <p className="join-demo-note">Biểu mẫu hiện là bản demo, chưa gửi dữ liệu về Lab.</p>
+        <p className="join-demo-note">Thông tin chỉ được sử dụng để liên hệ về việc tham gia Lab.</p>
       </form>
     </div>
   </section>;
