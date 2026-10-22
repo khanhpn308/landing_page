@@ -176,12 +176,23 @@ function Roadmap(){
       <div className="roadmap-scene">
         <div className="roadmap-background" aria-hidden="true"/>
         <svg className="roadmap-path" viewBox="0 0 1536 786" preserveAspectRatio="none" aria-hidden="true">
-          {/* The path shares the same 1536 × 786 coordinates as the scenic SVG.
-              Stage 04 leads into switchbacks below the summit flag (x≈1426,y≈268).
-              Nothing continues into the right edge. */}
-          <path className="roadmap-path-shadow" d="M-20 705 C105 715 173 712 226 707 C362 706 453 686 573 682 C710 676 805 620 904 643 C1015 669 1093 599 1147 557 C1190 523 1222 528 1253 517"/>
-          <path className="roadmap-path-main" d="M-20 705 C105 715 173 712 226 707 C362 706 453 686 573 682 C710 676 805 620 904 643 C1015 669 1093 599 1147 557 C1190 523 1222 528 1253 517"/>
-          <path className="roadmap-path-summit" d="M1253 517 C1315 497 1367 469 1397 429 C1418 404 1461 412 1446 381 C1432 356 1388 378 1398 349 C1404 330 1446 334 1438 312 Q1434 299 1426 288"/>
+          {/* One continuous curve uses a single stroke width from the first
+              milestone to the alpine summit (1426,268). Segment boundaries
+              are in the path's d attribute, not separately rendered paths. */}
+          <path
+            className="roadmap-path-route"
+            d="M-20 705
+               C105 715 173 712 226 707
+               C362 706 453 686 573 682
+               C710 676 805 620 904 643
+               C1015 669 1093 599 1147 557
+               C1190 523 1222 528 1253 517
+               C1311 498 1343 484 1385 443
+               C1406 422 1427 409 1424 392
+               C1420 375 1397 380 1397 361
+               C1397 342 1439 347 1440 327
+               C1440 312 1425 297 1426 268"
+          />
         </svg>
         <div className="roadmap-items">
           {milestones.map((m,i)=><article className={'milestone milestone-'+(i+1)} key={m.num}>
