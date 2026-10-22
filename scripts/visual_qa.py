@@ -119,6 +119,15 @@ def main():
                     focus(page,section)
                     page.screenshot(path=str(args.out/f"{key}-{section}.png"),animations="disabled")
                     check=diagnose(page)
+                    if section=="roadmap" and w>900:
+                        clearance=page.evaluate("""()=>{
+                          const bar=document.querySelector('.roadmap-benefits').getBoundingClientRect();
+                          const years=[...document.querySelectorAll('.milestone-year')]
+                             .map(el=>el.getBoundingClientRect().bottom);
+                          return Math.round(bar.top-Math.max(...years));
+                        }""")
+                        if clearance<8:
+                            checks.append(f"Roadmap year labels overlap benefits bar: clearance {clearance}px")
                     if check["overflow"]:
                         checks.append(f"Horizontal overflow in {section}")
                     if check["brokenImages"]:
