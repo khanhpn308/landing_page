@@ -492,3 +492,13 @@
   .join-back{order:1;width:100%;min-height:43px}
 }
 @media(prefers-reduced-motion:reduce){.track-card,.hero-track-notice{transition:none}.track-card:hover{transform:none}}
+
+/* Six nav items need an earlier responsive collapse to prevent 768–1000px overlap. */
+@media(min-width:621px) and (max-width:1000px){
+  .header-inner{position:relative}
+  .mobile-menu{display:block;margin-left:auto}
+  .nav{display:none;position:absolute;top:100%;left:0;right:0;height:auto;flex-direction:column;gap:0;padding:12px 20px;align-items:stretch;background:#0b1e36;box-shadow:0 10px 20px #0a162944}
+  .nav.nav-open{display:flex}
+  .nav>a{padding:11px 12px;height:auto;font-size:15px}
+  .nav>a.active:after{bottom:4px;width:37px;left:12px;right:auto}
+}
