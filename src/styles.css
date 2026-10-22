@@ -389,3 +389,13 @@
 .brand-mark-dark{display:none}
 .site-header:has(.nav>a[href="#roadmap"].active) .brand-mark-light{display:none}
 .site-header:has(.nav>a[href="#roadmap"].active) .brand-mark-dark{display:block}
+
+
+/* Localized photo caption masks the English text baked into the reference image. */
+.about-photo .glass-quote{
+  background:rgba(241,247,255,.98);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  min-width:251px;
+  z-index:2;
+}
