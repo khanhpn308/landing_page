@@ -300,3 +300,42 @@
   .roadmap-benefits{padding:10px 17px;border-radius:19px}
   .benefit .round-icon{width:55px;height:55px;flex-basis:55px}
 }
+
+
+/* Roadmap fine alignment, measured on the real 1536×1024 Chromium screenshot. */
+@media(min-width:1221px){
+  .milestone-1 .milestone-dot{margin-top:24px}
+  .milestone-2 .milestone-dot{margin-top:31px}
+  .milestone-3 .milestone-dot{margin-top:42px}
+  .milestone-4 .milestone-dot{margin-top:50px}
+  .milestone-3 .milestone-year{margin-top:23px}
+  .milestone-4 .milestone-year{margin-top:25px}
+}
+/* Native-size slice from the reference: never stretch the 236px-wide mountain
+   into a 900px banner, which creates blur and unwanted dark blocks. */
+@media(min-width:901px){
+  .roadmap-mountain{
+    right:calc((100% - 100vw)/2);
+    width:236px;
+    height:723px;
+    opacity:1;
+    background:
+      linear-gradient(90deg,#f8fbff 0%,transparent 18%),
+      url('/assets/roadmap-mountain.webp') right bottom / 236px 723px no-repeat;
+    -webkit-mask-image:linear-gradient(to right,transparent 0%,#000 22%);
+    mask-image:linear-gradient(to right,transparent 0%,#000 22%);
+  }
+  .roadmap-scene::before{
+    content:"";
+    position:absolute;
+    pointer-events:none;
+    left:calc((100% - 100vw)/2);
+    bottom:0;
+    height:265px;
+    width:100vw;
+    z-index:0;
+    background:linear-gradient(0deg,#dceafa 0%,#e8f2fc9c 48%,transparent 100%);
+    -webkit-mask-image:linear-gradient(to top,#000 12%,transparent 100%);
+    mask-image:linear-gradient(to top,#000 12%,transparent 100%);
+  }
+}
