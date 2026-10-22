@@ -33,7 +33,9 @@ function Icon({name, size=24, stroke=1.8, className=''}) {
 }
 function Logo() {
   return <a href="#home" className="brand" aria-label="Lab for Autonomous Machines and IoT — Home">
-    <svg className="brand-mark" viewBox="0 0 58 58" aria-hidden="true"><defs><linearGradient id="logograd" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#43b7ff"/><stop offset=".55" stopColor="#2562f8"/><stop offset="1" stopColor="#6146ef"/></linearGradient></defs><path fill="url(#logograd)" d="M28 3 53 47l-11 8-14-24-14 24L3 47Z"/><path fill="#132d5b" d="m28 17 9 16-9-5-9 5Z"/><path fill="#5fb9ff" d="m19 33-7 14 16-6Z"/><path fill="#1c5bde" d="m37 33 7 14-16-6Z"/></svg>
+    {/* Two replaceable vector assets, switched by the header theme in CSS. */}
+    <img className="brand-mark brand-mark-light" src="/assets/logo-light.svg" alt="" width="45" height="45" />
+    <img className="brand-mark brand-mark-dark" src="/assets/logo-dark.svg" alt="" width="45" height="45" />
     <span>Lab for Autonomous<br/>Machines &amp; IoT</span>
   </a>;
 }
