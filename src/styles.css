@@ -81,13 +81,15 @@
 }
 
 
-/* Roadmap v2 — approved 1536 × 1024 reference; desktop scene is deliberately
-   composed as a single canvas so the rising milestones overlap the heading. */
+/* Roadmap — a full-bleed 1536×786 scenic canvas with a summit-anchored route.
+   The decorative SVG and the road use IDENTICAL viewBoxes / viewport dimensions,
+   so changes in browser width cannot push the road beyond the mountain. */
 .roadmap-section{
   position:relative;
+  overflow:hidden;
   padding:0 0 29px;
-  background:linear-gradient(180deg,#fafdff 0%,#f1f7ff 54%,#edf5fe 85%,#fafdff 100%);
   scroll-margin-top:79px;
+  background:linear-gradient(180deg,#fafdff,#f1f7ff 78%,#fafdff);
 }
 .roadmap-layout{position:relative}
 .roadmap-top{
@@ -102,7 +104,7 @@
   line-height:.98;
   font-weight:800;
   letter-spacing:-.055em;
-  margin:23px 0 14px;
+  margin:20px 0 11px;
 }
 .roadmap-top>p{
   max-width:610px;
@@ -113,67 +115,77 @@
 }
 .roadmap-scene{
   position:relative;
-  width:100%;
+  isolation:isolate;
   height:786px;
-  margin:0;
-  border-radius:0;
-  background:transparent;
+  width:100%;
   overflow:visible;
+  background:transparent;
 }
-.roadmap-mountain{
+.roadmap-background,.roadmap-path{
   position:absolute;
+  inset-block:0;
+  left:calc((100% - 100vw)/2);
+  width:100vw;
+  height:100%;
   pointer-events:none;
+}
+.roadmap-background{
   z-index:0;
-  right:calc((1420px - 100vw)/2);
-  bottom:0;
-  width:68%;
-  height:660px;
-  background:
-    linear-gradient(90deg,#f8fbff 0%,#f3f8ffbc 24%,#ffffff00 52%),
-    url('/assets/roadmap-mountain.webp') right bottom / cover no-repeat;
-  opacity:.86;
-  -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 27%,#000 100%);
-  mask-image:linear-gradient(180deg,transparent 0%,#000 27%,#000 100%);
+  background:url('/assets/roadmap-landscape.svg') center center / 100% 100% no-repeat;
 }
 .roadmap-path{
-  position:absolute;
-  pointer-events:none;
-  z-index:1;
-  left:calc((100% - 100vw)/2);
-  top:0;
-  width:100vw;
-  height:786px;
-  filter:drop-shadow(0 4px 3px #b4c7e280);
+  z-index:2;
+  overflow:visible;
+  filter:drop-shadow(0 3px 3px #aac0dd73);
 }
-.roadmap-items{position:absolute;inset:0;z-index:2;display:block;padding:0;height:auto}
-.milestone{
+.roadmap-path path{
+  fill:none;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  vector-effect:none;
+}
+.roadmap-path-shadow{
+  stroke:#b7cde8;
+  opacity:.34;
+  stroke-width:22;
+}
+.roadmap-path-main{stroke:#fff;stroke-width:12}
+.roadmap-path-summit{stroke:#fff;stroke-width:8}
+.roadmap-items{
   position:absolute;
+  inset:0;
+  z-index:3;
+  display:block;
+  padding:0;
+}
+.milestone{
   display:flex;
-  align-items:center;
   flex-direction:column;
-  transform:none;
-  width:calc((100% - 80px)/4);
-  max-width:290px;
+  align-items:center;
+  position:absolute;
+  width:20.42%;
   min-width:0;
+  max-width:none;
+  transform:none;
 }
 .milestone-1{left:1.6%;top:351px}
 .milestone-2{left:26.1%;top:320px}
 .milestone-3{left:49%;top:268px}
-.milestone-4{left:71.1%;top:134px}
+.milestone-4{left:71.1%;top:134px;width:18.75%}
 .milestone-head{
   display:flex;
-  align-items:flex-start;
-  gap:14px;
   width:100%;
   height:101px;
+  align-items:flex-start;
+  gap:14px;
   margin-bottom:13px;
 }
 .milestone-count{
   display:grid;
   place-items:center;
+  flex:0 0 55px;
   width:55px;
   height:55px;
-  flex:0 0 55px;
   border-radius:50%;
   background:#e3eeff;
   color:#2167ff;
@@ -181,8 +193,20 @@
   font-weight:780;
 }
 .milestone-count-mint{background:#dbfaef;color:#0cae90}
-.milestone-head h3{font-size:19px;line-height:1.12;font-weight:770;letter-spacing:-.04em;margin:7px 0 8px}
-.milestone-head p{font-size:14px;line-height:1.38;color:#536486;margin:0;max-width:235px}
+.milestone-head h3{
+  font-size:19px;
+  line-height:1.12;
+  font-weight:770;
+  letter-spacing:-.04em;
+  margin:7px 0 8px;
+}
+.milestone-head p{
+  font-size:14px;
+  line-height:1.38;
+  color:#536486;
+  margin:0;
+  max-width:235px;
+}
 .milestone-media{
   width:100%;
   border:1px solid #d7e5fb;
@@ -191,28 +215,43 @@
   padding:10px 10px 12px;
   box-shadow:0 9px 28px #7097c012;
 }
-.milestone-media img{width:100%;height:145px;object-fit:cover;border-radius:10px}
-.milestone-tags{display:flex;justify-content:center;flex-wrap:wrap;gap:5px;margin-top:10px}
+.milestone-media img{
+  display:block;
+  width:100%;
+  height:145px;
+  object-fit:cover;
+  border-radius:10px;
+}
+.milestone-tags{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:5px;
+  margin-top:10px;
+}
 .milestone-tags span{
-  background:#edf3ff;
-  color:#203c6a;
   padding:7px 11px;
   border-radius:99px;
+  background:#edf3ff;
+  color:#203c6a;
   font-size:12px;
   line-height:1;
   white-space:nowrap;
 }
 .milestone-dot{
   position:relative;
-  margin-top:15px;
+  margin-top:22px;
+  flex:0 0 25px;
   height:25px;
   width:25px;
-  flex:0 0 25px;
   border:6px solid white;
   border-radius:50%;
   background:#2b76ff;
   box-shadow:0 0 0 6px #dfebff;
 }
+.milestone-2 .milestone-dot{margin-top:27px}
+.milestone-3 .milestone-dot{margin-top:39px}
+.milestone-4 .milestone-dot{margin-top:45px;transform:translateX(47px)}
 .milestone-dot-mint{background:#20cda7;box-shadow:0 0 0 6px #d9fff2}
 .milestone-dot-gold{background:#ffab24;box-shadow:0 0 0 6px #ffebc7}
 .milestone-dot-purple{background:#8754f8;box-shadow:0 0 0 6px #ede3ff}
@@ -230,120 +269,33 @@
 .milestone-year-mint{background:#e2fff6;color:#0ca98d}
 .milestone-year-gold{background:#fff4dc;color:#b88111}
 .milestone-year-purple{background:#f2eaff;color:#7548f5}
+.milestone-4 .milestone-year{transform:translateX(47px)}
 .roadmap-benefits{
   position:relative;
   z-index:4;
-  margin-top:0;
+  margin:0;
   min-height:131px;
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:0;
   padding:23px 24px;
-  border-radius:24px;
+  gap:0;
   border:1px solid #d8e5f8;
+  border-radius:24px;
   background:#ffffffed;
 }
-.benefit{display:flex;gap:22px;align-items:center;padding:0 17px;border-right:1px solid #d9e5f6}
+.benefit{
+  display:flex;
+  align-items:center;
+  gap:22px;
+  padding:0 17px;
+  border-right:1px solid #d9e5f6;
+}
 .benefit:last-child{border-right:0}
 .benefit .round-icon{width:75px;height:75px;flex:0 0 75px}
 .benefit h3{font-size:19px;line-height:1.12;font-weight:760;letter-spacing:-.04em;margin:0 0 6px}
 .benefit p{font-size:14px;line-height:1.4;color:#54668a;margin:0}
 
-/* Responsive progression: intentional grid, not a scaled screenshot. */
-@media(max-width:1220px) and (min-width:901px){
-  .roadmap-top{left:10px}
-  .roadmap-top h2{font-size:58px}
-  .milestone{width:23%}
-  .milestone-1{left:1%;top:360px}
-  .milestone-2{left:25.8%;top:325px}
-  .milestone-3{left:50.2%;top:273px}
-  .milestone-4{left:75%;top:137px}
-  .milestone-count{width:43px;height:43px;flex-basis:43px;font-size:17px}
-  .milestone-head{gap:8px}
-  .milestone-head h3{font-size:16px}
-  .milestone-head p{font-size:12px}
-  .milestone-media img{height:130px}
-  .milestone-tags span{font-size:10px;padding:6px}
-  .milestone-head{height:107px}
-  .benefit{gap:10px;padding:0 8px}
-  .benefit .round-icon{width:57px;height:57px;flex-basis:57px}
-  .benefit h3{font-size:16px}
-  .benefit p{font-size:12px}
-}
-@media(max-width:900px){
-  .roadmap-section{padding:52px 0 62px}
-  .roadmap-top{position:relative;left:auto;top:auto;margin-bottom:28px;max-width:650px}
-  .roadmap-top h2{font-size:clamp(43px,6vw,55px)}
-  .roadmap-top>p{font-size:17px}
-  .roadmap-scene{height:auto;min-height:0}
-  .roadmap-mountain{right:0;width:60%;height:100%;opacity:.3}
-  .roadmap-path{display:none}
-  .roadmap-items{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 17px;padding:0}
-  .milestone,.milestone-1,.milestone-2,.milestone-3,.milestone-4{position:relative;left:auto;top:auto;width:100%;max-width:none;transform:none}
-  .milestone-head{height:92px}
-  .milestone-media img{height:170px}
-  .milestone-year{margin-bottom:10px}
-  .roadmap-benefits{margin-top:18px;grid-template-columns:1fr;gap:0}
-  .benefit{padding:15px 8px;border-right:0;border-bottom:1px solid #d9e5f6}
-  .benefit:last-child{border-bottom:0}
-}
-@media(max-width:620px){
-  .roadmap-section{padding:43px 0 54px}
-  .roadmap-top{margin-bottom:22px}
-  .roadmap-top h2{font-size:clamp(36px,9vw,48px)}
-  .roadmap-top>p{font-size:16px}
-  .roadmap-items{grid-template-columns:1fr;gap:26px}
-  .milestone-head{height:auto;min-height:74px}
-  .milestone-media img{height:190px}
-  .milestone-year{margin-top:12px}
-  .roadmap-mountain{width:100%;opacity:.19}
-  .roadmap-benefits{padding:10px 17px;border-radius:19px}
-  .benefit .round-icon{width:55px;height:55px;flex-basis:55px}
-}
-
-
-/* Roadmap fine alignment, measured on the real 1536×1024 Chromium screenshot. */
-@media(min-width:1221px){
-  .milestone-1 .milestone-dot{margin-top:24px}
-  .milestone-2 .milestone-dot{margin-top:31px}
-  .milestone-3 .milestone-dot{margin-top:42px}
-  .milestone-4 .milestone-dot{margin-top:50px}
-  .milestone-3 .milestone-year{margin-top:23px}
-  .milestone-4 .milestone-year{margin-top:25px}
-}
-/* Native-size slice from the reference: never stretch the 236px-wide mountain
-   into a 900px banner, which creates blur and unwanted dark blocks. */
-@media(min-width:901px){
-  .roadmap-mountain{
-    right:calc((100% - 100vw)/2);
-    width:236px;
-    height:723px;
-    opacity:1;
-    background:
-      linear-gradient(90deg,#f8fbff 0%,transparent 18%),
-      url('/assets/roadmap-mountain.webp') right bottom / 236px 723px no-repeat;
-    -webkit-mask-image:linear-gradient(to right,transparent 0%,#000 22%);
-    mask-image:linear-gradient(to right,transparent 0%,#000 22%);
-  }
-  .roadmap-scene::before{
-    content:"";
-    position:absolute;
-    pointer-events:none;
-    left:calc((100% - 100vw)/2);
-    bottom:0;
-    height:265px;
-    width:100vw;
-    z-index:0;
-    background:linear-gradient(0deg,#dceafa 0%,#e8f2fc9c 48%,transparent 100%);
-    -webkit-mask-image:linear-gradient(to top,#000 12%,transparent 100%);
-    mask-image:linear-gradient(to top,#000 12%,transparent 100%);
-  }
-}
-
-
-/* Roadmap reference fidelity v3:
-   The approved Roadmap is the light-nav variant of the design system.
-   Selectors only apply while the Roadmap nav item is active. */
+/* Light navbar follows the reference when the Roadmap is active. */
 .site-header:has(.nav>a[href="#roadmap"].active){
   background:linear-gradient(100deg,#f7fbff,#eff6ff 65%,#edf5ff);
   color:#09152a;
@@ -355,80 +307,83 @@
 .site-header:has(.nav>a[href="#roadmap"].active) .nav>a.active,
 .site-header:has(.nav>a[href="#roadmap"].active) .nav>a:hover{color:#060d20}
 .site-header:has(.nav>a[href="#roadmap"].active) .mobile-menu{color:#11203a}
-@media(max-width:620px){
- .site-header:has(.nav>a[href="#roadmap"].active) .nav.nav-open{background:#f5faff;box-shadow:0 9px 22px #37527a26}
-}
-.roadmap-landscape{
-  display:block;
-  position:absolute;
-  z-index:0;
-  top:0;
-  left:calc((100% - 100vw)/2);
-  width:100vw;
-  height:100%;
-  overflow:visible;
-  pointer-events:none;
-  opacity:.82;
-}
-.roadmap-mountain{z-index:1}
-.roadmap-path{z-index:2}
-.roadmap-items{z-index:3}
-.roadmap-scene::before{z-index:0}
-@media(min-width:901px){
- .roadmap-mountain{
-   -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 38%);
-   mask-image:linear-gradient(90deg,transparent 0%,#000 38%);
- }
-}
-/* Fluid widescreen presentation: preserve 1536px geometry, prevent a huge
-   empty margin at 1908px browser width. */
+
 @media(min-width:1700px){
- .roadmap-section .roadmap-layout{
-    width:calc(100% - 7.55%);
+  .roadmap-section .roadmap-layout{
+    width:calc(100% - 8%);
     max-width:none;
- }
- .site-header:has(.nav>a[href="#roadmap"].active) .header-inner{
+  }
+  .site-header:has(.nav>a[href="#roadmap"].active) .header-inner{
     width:calc(100% - 11.5%);
     max-width:none;
- }
- .roadmap-top h2{font-size:clamp(65px,4.28vw,82px)}
- .roadmap-top{left:1.95%;top:53px}
- .roadmap-top>p{font-size:clamp(19px,1.18vw,22px);max-width:760px}
- .roadmap-scene{height:786px}
- .milestone{width:20.42%;max-width:none}
- .milestone-1{left:1.6%}
- .milestone-2{left:26.1%}
- .milestone-3{left:49%}
- .milestone-4{left:71.1%}
- .milestone-media img{height:clamp(145px,9.44vw,180px)}
- .milestone-head{height:110px}
- .milestone-head h3{font-size:clamp(19px,1.15vw,22px)}
- .milestone-head p{font-size:clamp(14px,.85vw,16px)}
- .roadmap-mountain{right:calc((100% - 100vw)/2)}
+  }
+  .roadmap-top{left:1.95%}
+  .roadmap-top h2{font-size:clamp(65px,4.28vw,82px)}
+  .roadmap-top>p{font-size:clamp(19px,1.18vw,22px);max-width:760px}
+  .milestone-head h3{font-size:clamp(19px,1.12vw,22px)}
+  .milestone-head p{font-size:clamp(14px,.84vw,16px)}
+  /* Keep 786px geometry; scaling only the path caused the original mismatch. */
+}
+@media(min-width:901px) and (max-width:1220px){
+  .roadmap-top{left:10px}
+  .roadmap-top h2{font-size:58px}
+  .milestone-head{gap:8px;height:107px}
+  .milestone-count{flex-basis:43px;width:43px;height:43px;font-size:17px}
+  .milestone-head h3{font-size:16px}
+  .milestone-head p{font-size:12px}
+  .milestone-media img{height:130px}
+  .milestone-tags span{font-size:10px;padding:6px}
+  .benefit{gap:10px;padding:0 8px}
+  .benefit .round-icon{width:57px;height:57px;flex-basis:57px}
+  .benefit h3{font-size:16px}
+  .benefit p{font-size:12px}
 }
 @media(max-width:900px){
- .roadmap-landscape{left:0;width:100%;opacity:.4}
+  .roadmap-section{padding:52px 0 62px}
+  .roadmap-top{position:relative;left:auto;top:auto;margin-bottom:28px;max-width:650px}
+  .roadmap-top h2{font-size:clamp(43px,6vw,55px)}
+  .roadmap-top>p{font-size:17px}
+  .roadmap-scene{height:auto;min-height:0}
+  .roadmap-background{left:0;width:100%;height:100%;background-size:cover;background-position:right bottom;opacity:.48}
+  .roadmap-path{display:none}
+  .roadmap-items{
+    position:relative;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:28px 17px;
+    padding:0;
+  }
+  .milestone,.milestone-1,.milestone-2,.milestone-3,.milestone-4{
+    position:relative;
+    width:100%;
+    max-width:none;
+    top:auto;
+    left:auto;
+    transform:none;
+  }
+  .milestone-head{height:92px}
+  .milestone-media img{height:170px}
+  .milestone-dot{margin-top:17px!important;transform:none!important}
+  .milestone-year{transform:none!important;margin-bottom:10px}
+  .roadmap-benefits{margin-top:18px;grid-template-columns:1fr}
+  .benefit{padding:15px 8px;border-right:0;border-bottom:1px solid #d9e5f6}
+  .benefit:last-child{border-bottom:0}
 }
-
-
-/* Last-mile Roadmap optical alignment and safe widescreen milestone clearance. */
-@media(min-width:1221px){
-  .roadmap-landscape{opacity:.61}
-  .roadmap-top h2{margin-top:20px;margin-bottom:10px}
-  .milestone-4{width:18.75%;max-width:266px}
-  .milestone-4 .milestone-head{transform:translateX(-16px)}
-  .milestone-4 .milestone-dot,
-  .milestone-4 .milestone-year{position:relative;left:39px}
+@media(max-width:620px){
+  .roadmap-section{padding:43px 0 54px}
+  .roadmap-top{margin-bottom:22px}
+  .roadmap-top h2{font-size:clamp(36px,9vw,48px)}
+  .roadmap-top>p{font-size:16px}
+  .roadmap-items{grid-template-columns:1fr;gap:26px}
+  .milestone-head{height:auto;min-height:74px}
+  .milestone-media img{height:190px}
+  .roadmap-benefits{padding:10px 17px;border-radius:19px}
+  .benefit .round-icon{width:55px;height:55px;flex-basis:55px}
+  .site-header:has(.nav>a[href="#roadmap"].active) .nav.nav-open{
+    background:#f5faff;
+    box-shadow:0 9px 22px #37527a26;
+  }
 }
-@media(min-width:1700px){
-  .roadmap-scene{height:900px}
-  .roadmap-path{height:786px}
-  .milestone-4{width:18.75%;max-width:none}
-  .roadmap-landscape{height:900px}
-  .roadmap-mountain{bottom:112px}
-}
-/* The 900px tablet layout intentionally remains a two-column flow. */
-
 
 /* Brand assets: replace the two SVG files in /public/assets/ to update the logo.
    Keep the name as real selectable text. The Roadmap header uses the light theme. */

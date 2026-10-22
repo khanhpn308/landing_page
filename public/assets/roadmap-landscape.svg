@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1536 786" preserveAspectRatio="none">
+<defs>
+ <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fafdff"/><stop offset=".48" stop-color="#f3f9ff"/><stop offset="1" stop-color="#d4e6f8"/></linearGradient>
+ <linearGradient id="mist" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffffff" stop-opacity="0"/><stop offset=".58" stop-color="#eaf4ff" stop-opacity=".24"/><stop offset="1" stop-color="#f5faff" stop-opacity=".65"/></linearGradient>
+ <linearGradient id="ridgeBack" x1="0" y1="0" x2=".2" y2="1"><stop stop-color="#c6d8ee"/><stop offset="1" stop-color="#91b1d1"/></linearGradient>
+ <linearGradient id="ridgeMid" x1="0" y1="0" x2=".3" y2="1"><stop stop-color="#b2cae4"/><stop offset="1" stop-color="#7d9fbe"/></linearGradient>
+ <linearGradient id="ridgeFront" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d2e3f5"/><stop offset=".5" stop-color="#809eb5"/><stop offset="1" stop-color="#4c6d83"/></linearGradient>
+ <linearGradient id="summit" x1="0" y1="0" x2="1" y2=".6"><stop stop-color="#e8f5ff"/><stop offset=".43" stop-color="#a2bdcf"/><stop offset="1" stop-color="#48617b"/></linearGradient>
+ <linearGradient id="rockLight" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f3f9ff"/><stop offset=".5" stop-color="#afc7db"/><stop offset="1" stop-color="#6a8297"/></linearGradient>
+ <linearGradient id="rockDark" x1="0" y1="0" x2="1" y2=".9"><stop stop-color="#9cacc1"/><stop offset="1" stop-color="#496275"/></linearGradient>
+ <linearGradient id="hazeLeft" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#f9fcff" stop-opacity=".94"/><stop offset=".42" stop-color="#f9fcff" stop-opacity=".55"/><stop offset=".85" stop-color="#f9fcff" stop-opacity="0"/></linearGradient>
+ <radialGradient id="sun" cx=".92" cy=".32" r=".43"><stop stop-color="#ffeccc" stop-opacity=".50"/><stop offset=".5" stop-color="#fef7ed" stop-opacity=".12"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+ <filter id="soft"><feGaussianBlur stdDeviation="8"/></filter>
+ <filter id="mistSoft"><feGaussianBlur stdDeviation="23"/></filter>
+</defs>
+<path fill="url(#sky)" d="M0 0H1536V786H0z"/>
+<path fill="url(#sun)" d="M0 0H1536V786H0z"/>
+<!-- Atmosphere extends across the entire width. -->
+<path d="M0 537 48 516 102 536 168 505 238 546 312 510 381 560 461 522 533 562 610 532 669 554 746 518 808 555 902 494 968 537 1038 481 1109 509 1191 431 1279 482 1350 419 1421 460 1536 365V786H0Z" fill="url(#ridgeBack)" opacity=".39" filter="url(#soft)"/>
+<path d="M0 602 71 570 142 587 241 550 334 591 415 554 498 615 575 560 658 584 748 552 830 581 920 526 997 560 1086 493 1154 520 1244 446 1332 482 1440 387 1536 426V786H0Z" fill="url(#ridgeMid)" opacity=".36" filter="url(#soft)"/>
+<path d="M0 666 133 641 229 649 330 621 410 657 515 604 623 638 736 582 814 603 925 561 1052 555 1152 477 1268 513 1337 427 1403 439 1508 385 1536 430V786H0Z" fill="url(#ridgeFront)" opacity=".34"/>
+<!-- Main alpine massif on the right: summit ~ x1425 y260. -->
+<path d="M1090 786 1154 652 1220 572 1287 515 1340 407 1391 356 1426 268 1473 342 1506 408 1536 458V786Z" fill="url(#summit)"/>
+<path d="M1426 268 1391 356 1340 407 1320 473 1396 418 1413 360 1445 408 1492 486 1536 527 1473 342Z" fill="url(#rockLight)" opacity=".78"/>
+<path d="M1426 268 1440 335 1462 356 1485 423 1536 458 1536 786 1434 659 1380 557 1422 481 1396 418 1413 360Z" fill="url(#rockDark)" opacity=".83"/>
+<path d="M1426 268 1399 331 1381 359 1399 348 1410 360 1426 334 1441 356 1451 359 1442 324Z" fill="#f7fbff"/>
+<path d="M1391 356 1370 383 1341 409 1333 432 1368 413 1392 382 1410 360Z" fill="#e3f1fa" opacity=".78"/>
+<path d="M1473 342 1452 373 1472 416 1487 424 1483 393Z" fill="#d9e8f2" opacity=".70"/>
+<path d="M1339 410 1317 462 1298 490 1240 567 1300 548 1353 475 1390 421 1372 444Z" fill="#d7e8f5" opacity=".43"/>
+<path d="M1383 473 1335 534 1277 575 1229 629 1275 618 1330 565 1407 515 1434 486Z" fill="#586f80" opacity=".17"/>
+<!-- Valley foothills; softly interleaved all the way to the left edge. -->
+<path d="M0 701 106 685 201 697 312 667 423 689 548 648 676 672 807 623 916 645 1053 573 1164 601 1233 548 1347 585 1434 535 1536 566V786H0Z" fill="#8aafc8" opacity=".20"/>
+<path d="M0 746 131 725 264 738 392 700 490 710 604 684 750 708 872 668 973 696 1074 650 1200 688 1283 607 1407 641 1536 581V786H0Z" fill="#567f96" opacity=".18"/>
+<!-- Small evergreens add depth without interfering with the route. -->
+<g fill="#315b53" opacity=".32">
+ <path d="m1280 660-13 27h9l-13 20h32l-13-20h9Zm39-20-11 22h8l-11 19h28l-11-19h7Zm58 5-16 30h9l-12 21h34l-13-21h10Zm68-51-12 25h8l-10 19h30l-10-19h8Zm38-3-14 28h8l-12 22h32l-12-22h8Z"/>
+</g>
+<rect x="0" y="580" width="1536" height="206" fill="url(#mist)"/>
+<rect x="0" y="0" width="1536" height="786" fill="url(#hazeLeft)"/>
+<path d="M-20 756 C294 716 460 752 718 697 C913 660 1090 666 1250 612" fill="none" stroke="#ecf6ff" stroke-width="56" opacity=".12" filter="url(#mistSoft)"/>
+<!-- Summit flag is decorative; road endpoint will terminate directly beneath it. -->
+<path d="M1426 268V236" stroke="#2b67e8" stroke-width="3.5" stroke-linecap="round"/>
+<path d="M1427 237q12-3 24 4l-7 8q-10-6-17-1Z" fill="#397dff"/>
+</svg>

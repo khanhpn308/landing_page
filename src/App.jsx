@@ -174,36 +174,14 @@ function Roadmap(){
         <p>A step-by-step journey to build skills, develop real systems, and create lasting impact.</p>
       </div>
       <div className="roadmap-scene">
-        <div className="roadmap-mountain" aria-hidden="true"/>
-        <svg className="roadmap-landscape" viewBox="0 0 1536 786" preserveAspectRatio="none" aria-hidden="true">
-          <defs>
-            <linearGradient id="alpine-back" x1="0" y1="0" x2=".15" y2="1">
-              <stop offset="0%" stopColor="#e7f2ff" stopOpacity=".22"/>
-              <stop offset="72%" stopColor="#b6cde8" stopOpacity=".53"/>
-              <stop offset="100%" stopColor="#c9d9eb" stopOpacity=".78"/>
-            </linearGradient>
-            <linearGradient id="alpine-middle" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#91b1d1" stopOpacity=".40"/>
-              <stop offset="100%" stopColor="#9bb6d2" stopOpacity=".72"/>
-            </linearGradient>
-            <linearGradient id="alpine-front" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#809fbf" stopOpacity=".40"/>
-              <stop offset="100%" stopColor="#7897b3" stopOpacity=".64"/>
-            </linearGradient>
-            <linearGradient id="alpine-fog" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#f5faff" stopOpacity="0"/>
-              <stop offset="65%" stopColor="#f0f7ff" stopOpacity=".42"/>
-              <stop offset="100%" stopColor="#f9fcff" stopOpacity=".92"/>
-            </linearGradient>
-            <filter id="alpine-soft"><feGaussianBlur stdDeviation="10"/></filter>
-          </defs>
-          <path d="M-70 548 L0 530 L48 552 L116 527 L182 559 L244 541 L320 571 L381 553 L467 583 L541 551 L629 582 L701 549 L776 570 L862 533 L920 567 L1012 519 L1094 551 L1179 483 L1251 519 L1330 457 L1423 513 L1545 425 L1545 786 L-70 786Z" fill="url(#alpine-back)" opacity=".75" filter="url(#alpine-soft)"/>
-          <path d="M-30 625 C90 596 175 648 260 618 C374 572 453 675 546 605 C627 556 680 614 745 614 C807 585 878 626 928 581 C986 549 1047 568 1084 537 C1140 487 1204 510 1283 437 C1339 402 1424 483 1548 380 L1548 786 L-30 786Z" fill="url(#alpine-middle)" opacity=".64" filter="url(#alpine-soft)"/>
-          <path d="M-30 688 C133 644 204 711 349 661 C427 626 505 702 585 655 C666 612 708 670 779 633 C854 598 923 633 973 578 C1048 512 1090 573 1156 514 C1239 454 1303 502 1360 448 C1442 372 1486 450 1549 385 L1549 786 L-30 786Z" fill="url(#alpine-front)" opacity=".46" filter="url(#alpine-soft)"/>
-          <rect x="0" y="590" width="1536" height="196" fill="url(#alpine-fog)"/>
-        </svg>
+        <div className="roadmap-background" aria-hidden="true"/>
         <svg className="roadmap-path" viewBox="0 0 1536 786" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M-20 705 C130 713 168 718 226 707 S450 691 572 682 S790 629 904 643 S1050 616 1120 566 S1190 526 1253 516 S1410 480 1556 426" fill="none" stroke="white" strokeWidth="12" strokeLinecap="round"/>
+          {/* The path shares the same 1536 × 786 coordinates as the scenic SVG.
+              Stage 04 leads into switchbacks below the summit flag (x≈1426,y≈268).
+              Nothing continues into the right edge. */}
+          <path className="roadmap-path-shadow" d="M-20 705 C105 715 173 712 226 707 C362 706 453 686 573 682 C710 676 805 620 904 643 C1015 669 1093 599 1147 557 C1190 523 1222 528 1253 517"/>
+          <path className="roadmap-path-main" d="M-20 705 C105 715 173 712 226 707 C362 706 453 686 573 682 C710 676 805 620 904 643 C1015 669 1093 599 1147 557 C1190 523 1222 528 1253 517"/>
+          <path className="roadmap-path-summit" d="M1253 517 C1315 497 1367 469 1397 429 C1418 404 1461 412 1446 381 C1432 356 1388 378 1398 349 C1404 330 1446 334 1438 312 Q1434 299 1426 288"/>
         </svg>
         <div className="roadmap-items">
           {milestones.map((m,i)=><article className={'milestone milestone-'+(i+1)} key={m.num}>
