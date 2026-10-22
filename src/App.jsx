@@ -348,5 +348,5 @@ function Join({ selectedTrack, onSelectTrack }) {
     </div>
   </section>;
 }
-function Footer(){return <footer className="footer"><div className="container footer-inner"><Logo/><span>Học · Xây dựng · Triển khai</span><a href="#home">Lên đầu trang ↑</a></div></footer>}
+function Footer(){return <footer className="footer"><div className="container footer-inner"><Logo/><span className="footer-motto"><span>Học</span><span className="footer-motto-dot" aria-hidden="true">·</span><span>Xây dựng</span><span className="footer-motto-dot" aria-hidden="true">·</span><span>Triển khai</span></span><a href="#home">Lên đầu trang ↑</a></div></footer>}
 export default function App(){const [selectedTrack,setSelectedTrack]=useState('');return <><Header/><main><Hero/><AboutPreview/><About/><Tracks selectedTrack={selectedTrack} onSelectTrack={setSelectedTrack}/><Learning/><Projects/><Roadmap/><Join selectedTrack={selectedTrack} onSelectTrack={setSelectedTrack}/></main><Footer/></>}
