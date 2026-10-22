@@ -90,3 +90,15 @@ python scripts/visual_qa.py --url http://127.0.0.1:5173
 **Quy trình nghiệm thu:** chụp ở Chrome zoom 100%, kiểm tra Hero → About → Learning → Projects → Roadmap; chỉnh CSS theo overlay và chạy lại. Điểm khác biệt pixel là tín hiệu chẩn đoán, **không** thể dùng để chứng minh pixel-perfect tuyệt đối vì nguồn tham chiếu là ảnh AI.
 
 **Trạng thái:** các chỉnh sửa CSS và kịch bản QA ở đây chưa được xác nhận trên trình duyệt WSL của bạn; phải chạy lệnh trên và review ảnh trước khi merge. Form Join Us vẫn chỉ là demo.
+
+
+## Đổi logo Lab
+
+Logo hiện là các file SVG riêng, **không** còn vẽ inline trong `src/App.jsx`:
+
+- `public/assets/logo-light.svg`: logo cho navbar **nền tối**, bao gồm Home, About, Learning và Projects.
+- `public/assets/logo-dark.svg`: logo cho navbar **nền sáng** (Roadmap) và favicon của trình duyệt.
+
+Thay hai file cùng tên bằng SVG mới, giữ kích thước tỉ lệ `viewBox` phù hợp. Tên "Lab for Autonomous Machines & IoT" vẫn là văn bản HTML trong component `Logo()`, với màu chữ tự đổi theo nền. Để thay cả chữ, chỉnh `src/App.jsx`. Kích thước biểu tượng là `.brand-mark` trong `src/styles.css`. Nếu muốn favicon riêng, sửa `<link rel="icon">` trong `index.html`.
+
+Làm mới Chrome bằng **Ctrl + Shift + R** sau khi đổi file để loại cache SVG.
