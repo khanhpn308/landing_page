@@ -153,14 +153,60 @@ function Roadmap(){return <section id="roadmap" className="section roadmap-secti
   </div>
   <div className="roadmap-benefits">{[['bars','Skill Growth','From fundamentals to advanced systems.'],['gear','Real-world Projects','From ideas to working prototypes.'],['people','Long-term Impact','Research, collaboration and applications.']].map(([icon,title,desc])=><div className="benefit" key={title}><span className="round-icon"><Icon name={icon} size={31}/></span><div><h3>{title}</h3><p>{desc}</p></div></div>)}</div>
 </div></section>}
-function Join(){const [form,setForm]=useState({name:'',year:'',phone:'',email:''});const [submitted,setSubmitted]=useState(false);const change=(field,value)=>{setForm(o=>({...o,[field]:value}));setSubmitted(false);};const thisYear=new Date().getFullYear();return <section id="join" className="section join-section"><div className="container join-grid"><div className="join-intro"><div className="kicker">JOIN US <span className="kicker-line"/></div><h2>Be Part of<br/><span className="text-blue">Our Team</span></h2><p>Fill in the form to express your interest in joining our lab.</p><img src={A+'join-hardware.webp'} alt="Electronics prototyping equipment on a lab desk" loading="lazy"/></div>
- <form className="join-form" onSubmit={e=>{e.preventDefault();setSubmitted(true);}}><div className="form-title"><span className="round-icon"><Icon name="user" size={31}/></span><div><h3>Application Form</h3><p>Let us know a bit about you.</p></div></div>
-  <label>Họ và tên<div className="input-wrap"><Icon name="user"/><input required autoComplete="name" placeholder="Nhập họ và tên của bạn" value={form.name} onChange={e=>change('name',e.target.value)}/></div></label>
-  <label>Năm nhập học<div className="input-wrap"><Icon name="calendar"/><select required value={form.year} onChange={e=>change('year',e.target.value)}><option value="">Chọn năm nhập học</option>{Array.from({length:9},(_,i)=>thisYear+1-i).map(y=><option value={y} key={y}>{y}</option>)}</select></div></label>
-  <label>Số điện thoại<div className="input-wrap"><Icon name="phone"/><input required inputMode="tel" type="tel" pattern="[+0-9() .-]{9,20}" autoComplete="tel" placeholder="Nhập số điện thoại" value={form.phone} onChange={e=>change('phone',e.target.value)}/></div></label>
-  <label>Email<div className="input-wrap"><Icon name="email"/><input required type="email" autoComplete="email" placeholder="Nhập email của bạn" value={form.email} onChange={e=>change('email',e.target.value)}/></div></label>
-  <button className="btn btn-primary submit-btn" type="submit">Gửi đăng ký <Icon name="arrow" size={21}/></button>
-  {submitted && <div role="status" className="form-notice">Đây là bản demo giao diện. Chưa có dữ liệu nào được gửi hoặc lưu. Cần kết nối API để nhận đăng ký.</div>}
- </form></div></section>}
+function Join(){
+  const initialForm = {name:'',year:'',phone:'',email:''};
+  const [form,setForm]=useState(initialForm);
+  const [honeypot,setHoneypot]=useState('');
+  const [status,setStatus]=useState('idle');
+  const thisYear=new Date().getFullYear();
+  const change=(field,value)=>{setForm(o=>({...o,[field]:value}));setStatus('idle');};
+
+  const submitApplication=async(event)=>{
+    event.preventDefault();
+    if(status==='sending') return;
+    setStatus('sending');
+    try{
+      const response=await fetch('/',{
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body:new URLSearchParams({
+          'form-name':'join-us',
+          'bot-field':honeypot,
+          ...form
+        }).toString()
+      });
+      if(!response.ok) throw new Error('Netlify Forms returned HTTP '+response.status);
+      setStatus('success');
+      setForm(initialForm);
+      setHoneypot('');
+    }catch(error){
+      console.error('Join Us submission failed:',error);
+      setStatus('error');
+    }
+  };
+  return <section id="join" className="section join-section"><div className="container join-grid">
+    <div className="join-intro">
+      <div className="kicker">JOIN US <span className="kicker-line"/></div>
+      <h2>Be Part of<br/><span className="text-blue">Our Team</span></h2>
+      <p>Fill in the form to express your interest in joining our lab.</p>
+      <img src={A+'join-hardware.webp'} alt="Electronics prototyping equipment on a lab desk" loading="lazy"/>
+    </div>
+    <form className="join-form" name="join-us" method="POST" data-netlify="true" netlify-honeypot="bot-field" onSubmit={submitApplication} aria-busy={status==='sending'}>
+      <input type="hidden" name="form-name" value="join-us" />
+      <div style={{position:'absolute',left:'-10000px',width:'1px',height:'1px',overflow:'hidden'}} aria-hidden="true">
+        <label>Không điền vào ô này <input type="text" name="bot-field" tabIndex={-1} autoComplete="off" value={honeypot} onChange={e=>setHoneypot(e.target.value)}/></label>
+      </div>
+      <div className="form-title"><span className="round-icon"><Icon name="user" size={31}/></span><div><h3>Application Form</h3><p>Let us know a bit about you.</p></div></div>
+      <label>Họ và tên<div className="input-wrap"><Icon name="user"/><input name="name" required autoComplete="name" maxLength={120} placeholder="Nhập họ và tên của bạn" value={form.name} onChange={e=>change('name',e.target.value)}/></div></label>
+      <label>Năm nhập học<div className="input-wrap"><Icon name="calendar"/><select name="year" required value={form.year} onChange={e=>change('year',e.target.value)}><option value="">Chọn năm nhập học</option>{Array.from({length:9},(_,i)=>thisYear+1-i).map(y=><option value={y} key={y}>{y}</option>)}</select></div></label>
+      <label>Số điện thoại<div className="input-wrap"><Icon name="phone"/><input name="phone" required inputMode="tel" type="tel" pattern="[+0-9() .-]{9,20}" autoComplete="tel" maxLength={20} placeholder="Nhập số điện thoại" value={form.phone} onChange={e=>change('phone',e.target.value)}/></div></label>
+      <label>Email<div className="input-wrap"><Icon name="email"/><input name="email" required type="email" autoComplete="email" maxLength={254} placeholder="Nhập email của bạn" value={form.email} onChange={e=>change('email',e.target.value)}/></div></label>
+      <p style={{fontSize:'12px',margin:'-6px 0 15px'}}>Thông tin chỉ được sử dụng để liên hệ về việc đăng ký tham gia Lab.</p>
+      <button className="btn btn-primary submit-btn" type="submit" disabled={status==='sending'}>{status==='sending'?'Đang gửi...':'Gửi đăng ký'} <Icon name="arrow" size={21}/></button>
+      {status==='success'&&<div role="status" className="form-notice">Đăng ký đã được gửi thành công. Lab sẽ liên hệ với bạn qua thông tin đã cung cấp.</div>}
+      {status==='error'&&<div role="alert" className="form-notice" style={{background:'#fff0f0',borderColor:'#ffc4c4',color:'#a02222'}}>Không thể gửi đăng ký lúc này. Vui lòng thử lại sau.</div>}
+    </form>
+  </div></section>;
+}
 function Footer(){return <footer className="footer"><div className="container footer-inner"><Logo/><span>Learn · Build · Deploy</span><a href="#home">Back to top ↑</a></div></footer>}
 export default function App(){return <><Header/><main><Hero/><About/><Learning/><Projects/><Roadmap/><Join/></main><Footer/></>}
