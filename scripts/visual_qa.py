@@ -120,6 +120,26 @@ def main():
                     page.screenshot(path=str(args.out/f"{key}-{section}.png"),animations="disabled")
                     check=diagnose(page)
                     if section=="roadmap" and w>900:
+                        scenery=page.evaluate("""() => {
+                          const b=document.querySelector('.roadmap-background');
+                          const p=document.querySelector('.roadmap-path');
+                          const nodes=document.querySelector('.roadmap-items');
+                          const end=p.querySelector('.roadmap-path-summit');
+                          const v=end.getPointAtLength(end.getTotalLength());
+                          const rect=b.getBoundingClientRect();
+                          return {
+                            endpoint:[Math.round(v.x),Math.round(v.y)],
+                            fullBleed: Math.abs(rect.left)<=2 && Math.abs(rect.right-innerWidth)<=2,
+                            correctStack: Number(getComputedStyle(b).zIndex)<Number(getComputedStyle(p).zIndex) &&
+                              Number(getComputedStyle(p).zIndex)<Number(getComputedStyle(nodes).zIndex),
+                            oldMountainRemoved:document.querySelector('.roadmap-mountain, .roadmap-landscape')===null,
+                            backgroundCSS:getComputedStyle(b).backgroundImage.includes('roadmap-landscape.svg')
+                          };
+                        }""")
+                        if not all((scenery["fullBleed"],scenery["correctStack"],scenery["oldMountainRemoved"],scenery["backgroundCSS"])):
+                            checks.append(f"Roadmap layers or panorama incorrect: {scenery}")
+                        if scenery["endpoint"][0]>1460 or scenery["endpoint"][1]>340:
+                            checks.append(f"Roadmap path does not terminate near summit: {scenery['endpoint']}")
                         clearance=page.evaluate("""()=>{
                           const bar=document.querySelector('.roadmap-benefits').getBoundingClientRect();
                           const years=[...document.querySelectorAll('.milestone-year')]
