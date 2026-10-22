@@ -154,7 +154,7 @@ def main():
             try:
                 ready(page,args.url)
                 checks=[]
-                for section,_ in SECTIONS+[("join","")]:
+                for section,_ in SECTIONS+[("tracks",""),("join","")]:
                     focus(page,section)
                     page.screenshot(path=str(args.out/f"{key}-{section}.png"),animations="disabled")
                     check=diagnose(page)
@@ -200,8 +200,11 @@ def main():
                         checks.append(f"Horizontal overflow in {section}")
                     if check["brokenImages"]:
                         checks.append(f"Broken images in {section}: {check['brokenImages']}")
-                if w<=620:
-                    page.locator(".mobile-menu").click()
+                if w<=1000:
+                    if not page.locator(".mobile-menu").is_visible():
+                        checks.append("Collapsed navigation toggle missing")
+                    else:
+                        page.locator(".mobile-menu").click()
                     if not page.locator(".nav").is_visible():
                         checks.append("Mobile menu failed to open")
                     page.locator('.nav a[href="#projects"]').click()
@@ -223,11 +226,12 @@ def main():
                 labels:[...document.querySelectorAll('#primary-navigation>a')].map(e=>e.textContent.trim()),
                 hasVietnameseHero:document.querySelector('#home p')?.textContent.includes('hệ thống nhúng'),
                 hasVietnameseRoadmap:document.querySelector('#roadmap h2')?.textContent.includes('học tập'),
-                hasVietnameseForm:document.querySelector('.join-form .form-title h3')?.textContent.includes('Thông tin đăng ký')
+                hasVietnameseTracks:document.querySelector('#tracks .tracks-intro p')?.textContent.includes('chọn một trong bốn'),
+                hasVietnameseForm:document.querySelector('.join-form .form-title h3')?.textContent.includes('Chọn lĩnh vực')
             })""")
             locale_ok=(locale["lang"]=="vi" and
-                       all(label in locale["labels"] for label in ["Trang chủ","Giới thiệu","Học tập","Dự án","Lộ trình"]) and
-                       locale["hasVietnameseHero"] and locale["hasVietnameseRoadmap"] and locale["hasVietnameseForm"])
+                       all(label in locale["labels"] for label in ["Trang chủ","Giới thiệu","Chuyên môn","Học tập","Dự án","Lộ trình"]) and
+                       locale["hasVietnameseHero"] and locale["hasVietnameseRoadmap"] and locale["hasVietnameseTracks"] and locale["hasVietnameseForm"])
             report["interactions"]["vietnameseLocale"]=locale_ok
             if not locale_ok:
                 report["findings"].append(f"Vietnamese interface check failed: {locale}")
@@ -250,12 +254,36 @@ def main():
             page.get_by_role("button",name="Tất cả",exact=True).click()
             reset=page.locator(".project-grid .project-card").count()
             report["interactions"]["projectFilters"]=(count==1 and reset==4)
+            # Confirm the required first step and the preselection from a track card.
+            next_button=page.get_by_role("button",name="Tiếp tục điền thông tin")
+            must_select=next_button.is_disabled()
+            page.locator('#tracks .track-card').nth(1).click()
+            preselected=page.locator('#join input[type="radio"][value="web"]').is_checked()
+            next_button.click()
+            step2_visible=page.locator('#join input[autocomplete="name"]').is_visible()
+            web_summary="Web Application" in page.locator('.join-selected-track strong').inner_text()
+
+            # Go back, retain the selection, then switch to a different specialization.
+            page.locator('.join-selected-track button').click()
+            back_preserves_choice=page.locator('#join input[type="radio"][value="web"]').is_checked()
+            page.locator('#join .join-track-option').filter(has_text="AI & Predictive Maintenance").click()
+            page.get_by_role("button",name="Tiếp tục điền thông tin").click()
+            ai_summary="AI & Predictive Maintenance" in page.locator('.join-selected-track strong').inner_text()
+            payload_choice=page.locator('#join input[type="hidden"][name="specialization"]').input_value()=="ai"
+            report["interactions"]["specializationFlow"]=all([
+                must_select,preselected,step2_visible,web_summary,
+                back_preserves_choice,ai_summary,payload_choice
+            ])
+            if not report["interactions"]["specializationFlow"]:
+                report["findings"].append("Specialization selection or two-step flow failed")
             page.locator('#join input[autocomplete="name"]').fill("QA Test")
             page.locator('#join select').select_option(index=1)
             page.locator('#join input[type="tel"]').fill("0912345678")
             page.locator('#join input[type="email"]').fill("qa@example.com")
             page.locator('#join button[type="submit"]').click()
-            report["interactions"]["demoForm"]=page.locator('#join [role="status"]').is_visible()
+            notice=page.locator('#join [role="status"]')
+            report["interactions"]["demoForm"]=(notice.is_visible() and
+                "chưa được gửi hoặc lưu" in notice.inner_text())
             if not all(report["interactions"].values()):
                 report["findings"].append("Interaction test failed")
         except Exception as exc:
